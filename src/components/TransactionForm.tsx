@@ -39,7 +39,7 @@ export default function TransactionForm({ onClose, budgets, transactions, settin
       await notificationService.sendNotification(
         'budget_exceeded',
         'Budget Exceeded! 🚨',
-        `You've exceeded your ${newCategory} budget of $${budget.limit}. Total spent: $${totalSpent.toFixed(2)}`,
+        `You've exceeded your ${newCategory} budget of ৳${budget.limit}. Total spent: ৳${totalSpent.toFixed(2)}`,
         settings
       );
     } else if (percent >= 80) {
@@ -91,102 +91,105 @@ export default function TransactionForm({ onClose, budgets, transactions, settin
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[60] flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
     >
       <motion.div 
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        className="glass-card w-full max-w-md rounded-none shadow-2xl overflow-hidden"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 20, opacity: 0 }}
+        className="bg-[#E8C6B0] w-full max-w-lg rounded-none overflow-hidden border-2 border-black"
       >
-        <div className="p-6 border-b border-white/5 flex justify-between items-center">
-          <h2 className="text-xl font-black text-white uppercase tracking-tight">Add Transaction</h2>
-          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-none transition-colors">
-            <X className="w-5 h-5 text-slate-500" />
+        <div className="p-8 border-b-2 border-black flex justify-between items-center bg-[#8B0000] text-white">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-black tracking-tighter uppercase">New Entry</h2>
+            <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Financial System Input</p>
+          </div>
+          <button onClick={onClose} className="p-3 hover:bg-white/10 rounded-none transition-all">
+            <X className="w-6 h-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-10 space-y-10">
           {/* Type Toggle */}
-          <div className="flex p-1 bg-white/5 rounded-none border border-white/5">
+          <div className="flex p-1 bg-black/5 border-2 border-black rounded-none">
             <button
               type="button"
               onClick={() => setType('expense')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-none transition-all ${
-                type === 'expense' ? 'bg-white/10 text-rose-400 shadow-sm font-black uppercase tracking-widest text-xs' : 'text-slate-500 text-xs font-bold uppercase tracking-widest'
+              className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-none transition-all ${
+                type === 'expense' ? 'bg-[#8B0000] text-white font-black text-[10px] uppercase tracking-widest' : 'text-black/40 text-[10px] font-black uppercase tracking-widest'
               }`}
             >
-              <Minus className="w-4 h-4" /> Expense
+              <Minus className="w-4 h-4" /> Debit
             </button>
             <button
               type="button"
               onClick={() => setType('income')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-none transition-all ${
-                type === 'income' ? 'bg-white/10 text-emerald-400 shadow-sm font-black uppercase tracking-widest text-xs' : 'text-slate-500 text-xs font-bold uppercase tracking-widest'
+              className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-none transition-all ${
+                type === 'income' ? 'bg-[#8B0000] text-white font-black text-[10px] uppercase tracking-widest' : 'text-black/40 text-[10px] font-black uppercase tracking-widest'
               }`}
             >
-              <Plus className="w-4 h-4" /> Income
+              <Plus className="w-4 h-4" /> Credit
             </button>
           </div>
 
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Amount</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">$</span>
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-widest text-black/60 ml-1">Transaction Value</label>
+              <div className="relative group">
+                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-black font-black text-2xl">৳</span>
                 <input 
                   type="number" 
                   step="0.01"
                   required
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full pl-8 pr-4 py-4 bg-white/5 border border-white/10 rounded-none focus:ring-2 focus:ring-indigo-500 outline-none text-2xl font-black text-white placeholder-slate-700"
+                  className="excel-input pl-14 text-4xl"
                   placeholder="0.00"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Category</label>
-                <div className="relative">
-                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4" />
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-widest text-black/60 ml-1">Sector</label>
+                <div className="relative group">
+                  <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-black/40 group-focus-within:text-black w-5 h-5" />
                   <select 
                     value={category}
                     onChange={(e) => setCategory(e.target.value as Category)}
-                    className="w-full pl-9 pr-4 py-3 bg-white/5 border border-white/10 rounded-none focus:ring-2 focus:ring-indigo-500 outline-none appearance-none text-white font-bold"
+                    className="excel-input pl-12 appearance-none text-xs"
                   >
                     {CATEGORIES.map(cat => (
-                      <option key={cat} value={cat} className="bg-slate-900">{cat}</option>
+                      <option key={cat} value={cat}>{cat}</option>
                     ))}
                   </select>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Date</label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4" />
+              <div className="space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-widest text-black/60 ml-1">Timestamp</label>
+                <div className="relative group">
+                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-black/40 group-focus-within:text-black w-5 h-5" />
                   <input 
                     type="date" 
                     required
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full pl-9 pr-4 py-3 bg-white/5 border border-white/10 rounded-none focus:ring-2 focus:ring-indigo-500 outline-none text-white font-bold"
+                    className="excel-input pl-12 text-xs"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Note (Optional)</label>
-              <div className="relative">
-                <FileText className="absolute left-3 top-3 text-slate-500 w-4 h-4" />
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-widest text-black/60 ml-1">Audit Note</label>
+              <div className="relative group">
+                <FileText className="absolute left-4 top-5 text-black/40 group-focus-within:text-black w-5 h-5" />
                 <textarea 
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
-                  className="w-full pl-9 pr-4 py-3 bg-white/5 border border-white/10 rounded-none focus:ring-2 focus:ring-indigo-500 outline-none min-h-[100px] text-white font-medium"
-                  placeholder="What was this for?"
+                  className="excel-input pl-12 min-h-[120px] text-sm py-4"
+                  placeholder="ENTER AUDIT DETAILS..."
                 />
               </div>
             </div>
@@ -194,11 +197,9 @@ export default function TransactionForm({ onClose, budgets, transactions, settin
 
           <button 
             disabled={loading}
-            className={`w-full py-4 rounded-none font-black uppercase tracking-widest text-white shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70 ${
-              type === 'expense' ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-500/20' : 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20'
-            }`}
+            className="neo-button neo-button-primary w-full py-6 flex items-center justify-center gap-4"
           >
-            {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Save Transaction'}
+            {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Commit Transaction'}
           </button>
         </form>
       </motion.div>

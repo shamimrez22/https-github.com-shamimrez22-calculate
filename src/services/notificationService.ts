@@ -50,6 +50,19 @@ class NotificationService {
         detail: { title, message, type } 
       }));
 
+      // System Notification
+      if ("Notification" in window) {
+        if (Notification.permission === "granted") {
+          new Notification(title, { body: message, icon: '/favicon.ico' });
+        } else if (Notification.permission !== "denied") {
+          Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+              new Notification(title, { body: message, icon: '/favicon.ico' });
+            }
+          });
+        }
+      }
+
       if (settings.soundEnabled) {
         this.playSound(type);
       }

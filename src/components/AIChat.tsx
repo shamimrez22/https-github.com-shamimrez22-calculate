@@ -4,6 +4,7 @@ import { Transaction, Budget } from '../types';
 import { Sparkles, Send, Loader2, User, Bot, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { GoogleGenAI } from "@google/genai";
+import { cn } from '../lib/utils';
 
 export default function AIChat({ transactions, budgets }: { transactions: Transaction[], budgets: Budget[] }) {
   const [messages, setMessages] = useState<{ role: 'user' | 'assistant', content: string }[]>([]);
@@ -37,6 +38,7 @@ export default function AIChat({ transactions, budgets }: { transactions: Transa
         - Recent Transactions: ${JSON.stringify(transactions.slice(0, 5))}
         - Budgets: ${JSON.stringify(budgets)}
         
+        IMPORTANT: All currency values are in Taka (৳).
         Provide concise, actionable financial advice based on the user's query and data.
         Be encouraging but realistic. Use a professional yet friendly tone.
       `;
@@ -64,37 +66,37 @@ export default function AIChat({ transactions, budgets }: { transactions: Transa
   };
 
   return (
-    <div className="h-[calc(100vh-200px)] flex flex-col space-y-6">
+    <div className="h-[calc(100vh-200px)] flex flex-col space-y-8 pb-10">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-black text-white tracking-tight uppercase">AI Advisor</h2>
-          <p className="text-slate-500 text-sm font-bold mt-1 uppercase tracking-widest">Chat with your personal financial expert</p>
+          <h2 className="text-3xl font-black text-black tracking-tighter uppercase">Advisor Interface</h2>
+          <p className="text-black/40 text-[10px] font-black uppercase tracking-widest mt-1">Direct link to fiscal intelligence</p>
         </div>
         <button 
           onClick={clearChat}
-          className="p-2 text-slate-600 hover:text-rose-400 transition-colors"
-          title="Clear Chat"
+          className="p-4 text-black/40 hover:text-[#8B0000] hover:bg-red-50 border-2 border-transparent hover:border-[#8B0000] rounded-none transition-all"
+          title="Clear Buffer"
         >
-          <Trash2 className="w-5 h-5" />
+          <Trash2 className="w-6 h-6" />
         </button>
       </div>
 
-      <div className="flex-1 glass-card overflow-hidden flex flex-col relative">
+      <div className="flex-1 bg-white/10 border-2 border-black flex flex-col relative overflow-hidden">
         <div 
           ref={scrollRef}
-          className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth"
+          className="flex-1 overflow-y-auto p-10 space-y-10 scroll-smooth bg-white/5"
         >
           {messages.length === 0 && (
-            <div className="h-full flex flex-col items-center justify-center text-center space-y-6 opacity-50">
-              <div className="w-20 h-20 bg-indigo-500/10 rounded-none flex items-center justify-center border border-indigo-500/20">
-                <Sparkles className="w-10 h-10 text-indigo-400" />
+            <div className="h-full flex flex-col items-center justify-center text-center space-y-8 opacity-30">
+              <div className="w-24 h-24 bg-[#8B0000] text-white border-2 border-black rounded-none flex items-center justify-center">
+                <Sparkles className="w-12 h-12" />
               </div>
-              <div className="max-w-sm">
-                <p className="text-white font-black uppercase tracking-widest">Ask me anything</p>
-                <p className="text-xs text-slate-500 font-medium mt-2 leading-relaxed">
-                  "How can I save more this month?"<br/>
-                  "Analyze my spending habits."<br/>
-                  "What's my biggest expense category?"
+              <div className="max-w-md">
+                <p className="text-black font-black uppercase tracking-widest text-sm">Awaiting Instructions</p>
+                <p className="text-[10px] text-black/60 font-black uppercase tracking-widest mt-4 leading-relaxed">
+                  "Analyze expenditure vectors"<br/>
+                  "Project savings potential"<br/>
+                  "Identify fiscal anomalies"
                 </p>
               </div>
             </div>
@@ -107,15 +109,17 @@ export default function AIChat({ transactions, budgets }: { transactions: Transa
               animate={{ opacity: 1, y: 0 }}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className={`flex gap-4 max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`w-10 h-10 shrink-0 flex items-center justify-center border ${
-                  msg.role === 'user' ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' : 'bg-violet-500/10 border-violet-500/20 text-violet-400'
-                }`}>
-                  {msg.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
+              <div className={`flex gap-6 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div className={cn(
+                  "w-12 h-12 shrink-0 flex items-center justify-center border-2 rounded-none",
+                  msg.role === 'user' ? "bg-[#8B0000] border-black text-white" : "bg-[#D1D1D1] border-black text-black"
+                )}>
+                  {msg.role === 'user' ? <User className="w-6 h-6" /> : <Bot className="w-6 h-6" />}
                 </div>
-                <div className={`p-5 text-sm leading-relaxed ${
-                  msg.role === 'user' ? 'bg-indigo-500 text-white font-bold' : 'bg-white/5 text-slate-300 border border-white/5'
-                }`}>
+                <div className={cn(
+                  "p-8 text-base leading-relaxed border-2 font-black tracking-tight",
+                  msg.role === 'user' ? "bg-[#8B0000] text-white border-black" : "bg-[#E8C6B0] text-black border-black"
+                )}>
                   {msg.content}
                 </div>
               </div>
@@ -124,34 +128,34 @@ export default function AIChat({ transactions, budgets }: { transactions: Transa
 
           {loading && (
             <div className="flex justify-start">
-              <div className="flex gap-4 max-w-[80%]">
-                <div className="w-10 h-10 shrink-0 bg-violet-500/10 border border-violet-500/20 text-violet-400 flex items-center justify-center">
-                  <Bot className="w-5 h-5" />
+              <div className="flex gap-6 max-w-[85%]">
+                <div className="w-12 h-12 shrink-0 bg-[#D1D1D1] border-2 border-black text-black flex items-center justify-center rounded-none">
+                  <Bot className="w-6 h-6" />
                 </div>
-                <div className="p-5 bg-white/5 border border-white/5 flex items-center gap-3">
-                  <Loader2 className="w-4 h-4 animate-spin text-violet-400" />
-                  <span className="text-xs font-black text-slate-500 uppercase tracking-widest">Advisor is thinking...</span>
+                <div className="p-8 bg-[#E8C6B0] border-2 border-black flex items-center gap-4">
+                  <Loader2 className="w-6 h-6 animate-spin text-black" />
+                  <span className="text-[10px] font-black text-black uppercase tracking-widest">Neural processing active...</span>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        <form onSubmit={handleSend} className="p-6 border-t border-white/5 bg-black/20">
+        <form onSubmit={handleSend} className="p-10 border-t-2 border-black bg-white/20">
           <div className="relative">
             <input 
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="TYPE YOUR FINANCIAL QUERY..."
-              className="w-full pl-6 pr-16 py-5 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none font-bold uppercase tracking-widest text-xs"
+              placeholder="ENTER FISCAL QUERY..."
+              className="excel-input pr-20"
             />
             <button 
               type="submit"
               disabled={!input.trim() || loading}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-3 bg-indigo-500 hover:bg-indigo-600 text-white transition-all disabled:opacity-50"
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-[#8B0000] hover:bg-white hover:text-[#8B0000] text-white border-2 border-black rounded-none transition-all disabled:opacity-50"
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-6 h-6" />
             </button>
           </div>
         </form>

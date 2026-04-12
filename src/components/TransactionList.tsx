@@ -7,6 +7,7 @@ import Papa from 'papaparse';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { cn } from '../lib/utils';
+import ConfirmationModal from './ConfirmationModal';
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -15,6 +16,7 @@ interface TransactionListProps {
 export default function TransactionList({ transactions }: TransactionListProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>('all');
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const filteredTransactions = transactions.filter(t => {
     const matchesSearch = t.category.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -25,7 +27,7 @@ export default function TransactionList({ transactions }: TransactionListProps) 
 
   const handleDelete = async (id: string) => {
     const profile = storage.getCurrentUser();
-    if (!profile || !window.confirm('Are you sure you want to delete this transaction?')) return;
+    if (!profile) return;
     try {
       const data = storage.getUserData(profile.uid);
       storage.setUserData(profile.uid, {
@@ -62,7 +64,7 @@ export default function TransactionList({ transactions }: TransactionListProps) 
       format(new Date(t.date), 'yyyy-MM-dd'),
       t.type.toUpperCase(),
       t.category,
-      `$${t.amount.toFixed(2)}`,
+      `৳${t.amount.toFixed(2)}`,
       t.note || ''
     ]);
     (doc as any).autoTable({
@@ -74,45 +76,46 @@ export default function TransactionList({ transactions }: TransactionListProps) 
   };
 
   return (
-    <div className="space-y-8 pb-10">
+    <div className="space-y-10 pb-10">
       <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
         <div>
-          <h2 className="text-3xl font-black text-white tracking-tight">Transaction History</h2>
-          <p className="text-slate-500 text-sm font-medium mt-1">Manage and export your financial records</p>
+          <h2 className="text-3xl font-black text-black tracking-tighter uppercase">Transaction History</h2>
+          <p className="text-black/40 text-[10px] font-bold uppercase tracking-widest mt-1">Audit and export financial records</p>
         </div>
         <div className="flex gap-3 w-full md:w-auto">
-          <button onClick={exportCSV} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-none text-sm font-bold text-white hover:bg-white/10 transition-all">
-            <Download className="w-4 h-4 text-indigo-400" /> CSV
+          <button onClick={exportCSV} className="neo-button flex items-center gap-3">
+            <Download className="w-4 h-4" /> CSV EXPORT
           </button>
-          <button onClick={exportPDF} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-none text-sm font-bold text-white hover:bg-white/10 transition-all">
-            <Download className="w-4 h-4 text-violet-400" /> PDF
+          <button onClick={exportPDF} className="neo-button neo-button-primary flex items-center gap-3">
+            <Download className="w-4 h-4" /> PDF REPORT
           </button>
         </div>
       </div>
 
       <div className="glass-card overflow-hidden">
-        <div className="p-6 border-b border-white/5 space-y-6">
-          <div className="flex flex-col md:flex-row gap-4">
+        <div className="p-8 border-b-2 border-[#8B0000] bg-white/30 space-y-8">
+          <div className="flex flex-col md:flex-row gap-6">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-black/30 w-5 h-5" />
               <input 
                 type="text" 
-                placeholder="Search by category or note..."
+                placeholder="FILTER BY CATEGORY OR NOTE..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                className="excel-input pl-12"
               />
             </div>
-            <div className="flex p-1.5 bg-white/5 rounded-none border border-white/5">
+            <div className="flex p-1 bg-white border-2 border-black rounded-none">
               {(['all', 'income', 'expense'] as const).map(type => (
                 <button
                   key={type}
                   onClick={() => setFilterType(type)}
-                  className={`px-6 py-2 rounded-none text-xs font-black uppercase tracking-widest transition-all ${
+                  className={cn(
+                    "px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-widest transition-all",
                     filterType === type 
-                      ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' 
-                      : 'text-slate-500 hover:text-slate-300'
-                  }`}
+                      ? 'bg-[#8B0000] text-white' 
+                      : 'text-black/40 hover:text-black'
+                  )}
                 >
                   {type}
                 </button>
@@ -122,46 +125,51 @@ export default function TransactionList({ transactions }: TransactionListProps) 
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full border-collapse">
             <thead>
-              <tr className="text-left text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] border-b border-white/5">
-                <th className="px-8 py-5">Date</th>
-                <th className="px-8 py-5">Category</th>
-                <th className="px-8 py-5">Note</th>
-                <th className="px-8 py-5 text-right">Amount</th>
-                <th className="px-8 py-5 text-center">Action</th>
+              <tr className="text-left text-white text-[10px] font-black uppercase tracking-widest border-b-2 border-black bg-[#8B0000]">
+                <th className="px-10 py-4">Timestamp</th>
+                <th className="px-10 py-4">Sector</th>
+                <th className="px-10 py-4">Description</th>
+                <th className="px-10 py-4 text-right">Value</th>
+                <th className="px-10 py-4 text-center">Control</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y-2 divide-black/10">
               {filteredTransactions.map((t) => (
-                <tr key={t.id} className="group hover:bg-white/5 transition-colors">
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
+                <tr key={t.id} className="group hover:bg-white/50 transition-colors">
+                  <td className="px-10 py-6">
+                    <div className="flex items-center gap-6">
                       <div className={cn(
-                        "w-10 h-10 rounded-none flex items-center justify-center",
-                        t.type === 'income' ? "bg-emerald-500/10 text-emerald-500" : "bg-rose-500/10 text-rose-500"
+                        "w-10 h-10 rounded-none flex items-center justify-center border-2 border-black",
+                        t.type === 'income' ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-[#8B0000]"
                       )}>
                         {t.type === 'income' ? <ArrowDownLeft className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
                       </div>
-                      <span className="text-sm font-bold text-slate-300">{format(new Date(t.date), 'MMM dd, yyyy')}</span>
+                      <span className="text-sm font-black text-black uppercase tracking-tight">{format(new Date(t.date), 'MMM dd, yyyy')}</span>
                     </div>
                   </td>
-                  <td className="px-8 py-6">
-                    <span className="text-sm font-black text-white uppercase tracking-wider">{t.category}</span>
+                  <td className="px-10 py-6">
+                    <span className={cn(
+                      "px-4 py-1.5 rounded-none text-[10px] font-black uppercase tracking-widest border-2 border-black bg-white",
+                      t.type === 'income' ? "text-emerald-700" : "text-black"
+                    )}>
+                      {t.category}
+                    </span>
                   </td>
-                  <td className="px-8 py-6">
-                    <span className="text-sm text-slate-500 font-medium truncate max-w-[200px] block">{t.note || '-'}</span>
+                  <td className="px-10 py-6">
+                    <span className="text-sm text-black/60 font-bold uppercase tracking-tight truncate max-w-[250px] block">{t.note || '-'}</span>
                   </td>
                   <td className={cn(
-                    "px-8 py-6 text-right font-black text-lg",
-                    t.type === 'income' ? "text-emerald-400" : "text-white"
+                    "px-10 py-6 text-right font-black text-2xl tracking-tighter",
+                    t.type === 'income' ? "text-emerald-700" : "text-black"
                   )}>
-                    {t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString()}
+                    {t.type === 'income' ? '+' : '-'}৳{t.amount.toLocaleString()}
                   </td>
-                  <td className="px-8 py-6 text-center">
+                  <td className="px-10 py-6 text-center">
                     <button 
-                      onClick={() => t.id && handleDelete(t.id)}
-                      className="p-3 text-slate-600 hover:text-rose-500 hover:bg-rose-500/10 rounded-none transition-all"
+                      onClick={() => t.id && setDeleteId(t.id)}
+                      className="p-3 text-black/30 hover:text-[#8B0000] hover:bg-white border-2 border-transparent hover:border-black rounded-none transition-all"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
@@ -170,12 +178,12 @@ export default function TransactionList({ transactions }: TransactionListProps) 
               ))}
               {filteredTransactions.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="py-20 text-center">
-                    <div className="flex flex-col items-center gap-4">
-                      <div className="w-16 h-16 bg-white/5 rounded-none flex items-center justify-center">
-                        <Search className="w-8 h-8 text-slate-700" />
+                  <td colSpan={5} className="py-32 text-center">
+                    <div className="flex flex-col items-center gap-6">
+                      <div className="w-20 h-20 bg-white/30 rounded-none flex items-center justify-center border-2 border-black">
+                        <Search className="w-10 h-10 text-black/20" />
                       </div>
-                      <p className="text-slate-500 font-bold">No transactions found matching your criteria.</p>
+                      <p className="text-black/40 font-black uppercase tracking-widest">No records found in system</p>
                     </div>
                   </td>
                 </tr>
@@ -184,6 +192,15 @@ export default function TransactionList({ transactions }: TransactionListProps) 
           </table>
         </div>
       </div>
+      <ConfirmationModal 
+        isOpen={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={() => deleteId && handleDelete(deleteId)}
+        title="Confirm Deletion"
+        message="Are you sure you want to purge this transaction record? This action is irreversible."
+        confirmLabel="Purge"
+        cancelLabel="Abort"
+      />
     </div>
   );
 }

@@ -209,14 +209,14 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#000000] flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-6">
           <div className="relative">
-            <div className="w-16 h-16 border-4 border-indigo-500/20 rounded-none animate-pulse" />
-            <Loader2 className="w-16 h-16 text-indigo-500 animate-spin absolute top-0 left-0" />
+            <div className="w-16 h-16 border-4 border-indigo-500/10 rounded-none animate-pulse" />
+            <Loader2 className="w-16 h-16 text-indigo-600 animate-spin absolute top-0 left-0" />
           </div>
           <div className="text-center">
-            <p className="text-white text-xl font-black tracking-tighter uppercase">FinTrack AI</p>
+            <p className="text-slate-900 text-xl font-bold tracking-tight">FinTrack AI</p>
             <p className="text-slate-500 text-sm font-medium mt-1">Synchronizing your financial data...</p>
           </div>
         </div>
@@ -307,16 +307,16 @@ function Toast({ title, message, type, onClose }: { title: string; message: stri
       initial={{ opacity: 0, y: 50, x: '-50%' }}
       animate={{ opacity: 1, y: 0, x: '-50%' }}
       exit={{ opacity: 0, y: 50, x: '-50%' }}
-      className="fixed bottom-24 md:bottom-10 left-1/2 z-[200] w-[90%] max-w-sm glass-card p-5 flex items-start gap-5 shadow-2xl shadow-black/50 rounded-none border border-white/10"
+      className="fixed bottom-24 md:bottom-10 left-1/2 z-[200] w-[90%] max-w-sm bg-white p-5 flex items-start gap-5 shadow-2xl rounded-none border border-slate-200"
     >
-      <div className="p-3 bg-indigo-500/10 rounded-none border border-indigo-500/20">
+      <div className="p-3 bg-indigo-50 rounded-none border border-indigo-100">
         {icons[type] || icons.default}
       </div>
       <div className="flex-1 min-w-0">
-        <h4 className="font-black text-white text-xs uppercase tracking-[0.1em]">{title}</h4>
-        <p className="text-slate-400 text-[10px] font-bold mt-1 leading-relaxed">{message}</p>
+        <h4 className="font-bold text-slate-900 text-sm tracking-tight">{title}</h4>
+        <p className="text-slate-500 text-xs font-medium mt-1 leading-relaxed">{message}</p>
       </div>
-      <button onClick={onClose} className="p-2 text-slate-600 hover:text-white transition-colors">
+      <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-900 transition-colors">
         <X className="w-4 h-4" />
       </button>
     </motion.div>

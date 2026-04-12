@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { storage } from '../lib/storage';
-import { PieChart, User, Lock, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
-import { motion } from 'motion/react';
+import { PieChart, User, Lock, ArrowRight, Loader2, Eye, EyeOff, Mail, ShieldCheck, Zap, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -22,10 +22,8 @@ export default function Auth() {
         const profile = storage.login(username, password);
         storage.setCurrentUser(profile);
       } else {
-        // Validation
         if (!email.includes('@')) throw new Error('Invalid email address');
         if (password.length < 6) throw new Error('Password must be at least 6 characters');
-
         const profile = storage.register(username, email, password);
         storage.setCurrentUser(profile);
       }
@@ -37,114 +35,168 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Glows */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-indigo-600/20 rounded-none blur-[120px]" />
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-violet-600/20 rounded-none blur-[120px]" />
-
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-md glass-card p-10 relative z-10"
-      >
-        <div className="flex flex-col items-center mb-10">
-          <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-none flex items-center justify-center mb-6 shadow-2xl shadow-indigo-500/20">
-            <PieChart className="text-white w-10 h-10" />
+    <div className="min-h-screen bg-[#E8C6B0] flex items-center justify-center p-6 relative overflow-hidden grid-bg font-sans">
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-0 items-stretch relative z-10 border-2 border-black">
+        {/* Left: Branding */}
+        <div className="hidden lg:flex flex-col justify-between p-16 bg-[#8B0000] text-white relative overflow-hidden border-r-2 border-black">
+          <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-full grid-bg opacity-20" />
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tighter uppercase">FinTrack AI</h1>
-          <p className="text-slate-500 text-center mt-3 font-medium">
-            {isLogin ? 'Welcome back! Manage your finances with AI.' : 'Start your journey to financial freedom.'}
-          </p>
+          
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="relative z-10 space-y-12"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-white border-2 border-black rounded-none flex items-center justify-center">
+                <PieChart className="text-[#8B0000] w-6 h-6" />
+              </div>
+              <span className="text-2xl font-black tracking-tighter uppercase">FinTrack<span className="text-white">.</span></span>
+            </div>
+            
+            <div className="space-y-6">
+              <h1 className="text-6xl font-black leading-[0.9] tracking-tighter uppercase">
+                Institutional <br />
+                <span className="text-[#E8C6B0]">Grade</span> <br />
+                Intelligence.
+              </h1>
+              <p className="text-white/60 text-lg font-bold uppercase tracking-widest leading-relaxed max-w-xs">
+                Professional wealth management for the modern era.
+              </p>
+            </div>
+          </motion.div>
+
+          <div className="relative z-10 pt-12 border-t-2 border-white/20 flex items-center gap-6">
+            <div className="flex -space-x-2">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="w-10 h-10 rounded-none border-2 border-black bg-white overflow-hidden">
+                  <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=user${i}`} alt="User" referrerPolicy="no-referrer" />
+                </div>
+              ))}
+            </div>
+            <p className="text-[10px] text-white/60 font-black uppercase tracking-widest">Trusted by <span className="text-white">50k+</span> Analysts</p>
+          </div>
         </div>
 
-        {error && (
-          <motion.div 
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-rose-500/10 text-rose-400 p-4 rounded-none text-xs font-bold uppercase tracking-widest mb-8 border border-rose-500/20"
-          >
-            {error}
-          </motion.div>
-        )}
-
-        <form onSubmit={handleAuth} className="space-y-6">
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Username</label>
-            <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 w-5 h-5" />
-              <input 
-                type="text" 
-                required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none transition-all font-bold"
-                placeholder="Enter username"
-              />
+        {/* Right: Auth Card */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="bg-[#E8C6B0] p-12 lg:p-20 space-y-12 relative"
+        >
+          <div className="space-y-4">
+            <div className="inline-block px-3 py-1 bg-[#8B0000] text-white text-[10px] font-black uppercase tracking-widest border-2 border-black">
+              {isLogin ? 'Authentication Required' : 'System Registration'}
             </div>
+            <h2 className="text-4xl font-black text-black tracking-tighter uppercase">
+              {isLogin ? 'Access Portal' : 'Initialize Account'}
+            </h2>
           </div>
 
-          {!isLogin && (
-            <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Email Address</label>
-              <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 w-5 h-5" />
-                <input 
-                  type="email" 
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none transition-all font-bold"
-                  placeholder="Enter email"
-                />
+          <AnimatePresence mode="wait">
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="p-5 bg-rose-50 border-2 border-[#8B0000] rounded-none text-[#8B0000] text-[10px] font-black uppercase tracking-widest flex items-center gap-4"
+              >
+                <ShieldCheck className="w-6 h-6" /> {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <form onSubmit={handleAuth} className="space-y-8">
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <label className="excel-label ml-1">Identity Identifier</label>
+                <div className="relative group">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
+                  <input 
+                    type="text" 
+                    required
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full pl-12 pr-4 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm uppercase tracking-widest"
+                    placeholder="USERNAME"
+                  />
+                </div>
+              </div>
+
+              {!isLogin && (
+                <div className="space-y-3">
+                  <label className="excel-label ml-1">Communication Channel</label>
+                  <div className="relative group">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
+                    <input 
+                      type="email" 
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full pl-12 pr-4 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm uppercase tracking-widest"
+                      placeholder="EMAIL@SYSTEM.COM"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <label className="excel-label ml-1">Security Key</label>
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
+                  <input 
+                    type={showPassword ? "text" : "password"} 
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full pl-12 pr-14 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm tracking-widest"
+                    placeholder="••••••••"
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-black/30 hover:text-black transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
               </div>
             </div>
-          )}
 
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 w-5 h-5" />
-              <input 
-                type={showPassword ? "text" : "password"} 
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-14 py-4 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none transition-all font-bold"
-                placeholder="••••••••"
-              />
+            <div className="space-y-6 pt-6">
+              <button 
+                disabled={loading}
+                className="w-full bg-white text-black hover:bg-[#D1D1D1] border-2 border-black py-5 rounded-none font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-4 disabled:opacity-50 group"
+              >
+                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                  <>
+                    {isLogin ? 'Authorize Session' : 'Create Identity'}
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                  </>
+                )}
+              </button>
+
               <button 
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-600 hover:text-white transition-colors"
+                onClick={() => setIsLogin(!isLogin)}
+                className="w-full py-2 text-[10px] font-black text-black/40 hover:text-black uppercase tracking-widest transition-colors flex items-center justify-center gap-2"
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {isLogin ? "Request New Credentials" : "Return to Access Portal"}
               </button>
             </div>
+          </form>
+
+          <div className="pt-12 border-t-2 border-black/10 flex items-center justify-between">
+            <div className="flex items-center gap-3 text-black/30">
+              <Sparkles className="w-4 h-4" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Encrypted Terminal</span>
+            </div>
+            <span className="text-[10px] font-black text-black/30 uppercase tracking-widest">v4.0.0-CORE</span>
           </div>
-
-          <button 
-            disabled={loading}
-            className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-4 rounded-none font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-3 disabled:opacity-50"
-          >
-            {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
-              <>
-                {isLogin ? 'Sign In' : 'Create Account'}
-                <ArrowRight className="w-6 h-6" />
-              </>
-            )}
-          </button>
-        </form>
-
-        <p className="text-center mt-10 text-slate-500 font-bold text-sm">
-          {isLogin ? "Don't have an account?" : "Already have an account?"}{' '}
-          <button 
-            onClick={() => setIsLogin(!isLogin)}
-            className="text-indigo-400 font-black hover:text-indigo-300 transition-colors"
-          >
-            {isLogin ? 'Sign Up' : 'Sign In'}
-          </button>
-        </p>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }

@@ -13,12 +13,12 @@ interface TaskManagerProps {
 
 function PriorityBadge({ priority }: { priority: Task['priority'] }) {
   const colors = {
-    high: 'bg-rose-500/20 text-rose-400 border-rose-500/20',
-    medium: 'bg-amber-500/20 text-amber-400 border-amber-500/20',
-    low: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20',
+    high: 'bg-rose-50 text-[#8B0000] border-[#8B0000]',
+    medium: 'bg-[#8B0000] text-white border-black',
+    low: 'bg-white text-black/40 border-black/20',
   };
   return (
-    <span className={cn("text-[10px] font-black uppercase px-2 py-0.5 rounded-none border", colors[priority])}>
+    <span className={cn("text-[10px] font-black uppercase px-3 py-1 rounded-none border-2", colors[priority])}>
       {priority}
     </span>
   );
@@ -38,8 +38,8 @@ function TaskItem({ task, toggleComplete, handleDelete, setEditingTask, setShowF
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "glass-card p-6 flex items-center gap-5 group transition-all",
-        task.completed ? "opacity-40 grayscale" : "glass-card-hover"
+        "bg-white/50 p-6 flex items-center gap-6 group transition-all border-2 border-black",
+        task.completed ? "opacity-40 grayscale" : "hover:bg-white"
       )}
     >
       <button 
@@ -47,51 +47,47 @@ function TaskItem({ task, toggleComplete, handleDelete, setEditingTask, setShowF
         className={cn(
           "w-8 h-8 rounded-none border-2 flex items-center justify-center transition-all",
           task.completed 
-            ? "bg-emerald-500 border-emerald-500 text-white" 
-            : "border-white/10 text-transparent hover:border-indigo-500 hover:text-indigo-500"
+            ? "bg-[#8B0000] border-black text-white" 
+            : "border-black text-transparent hover:text-black"
         )}
       >
         <CheckCircle2 className="w-5 h-5" />
       </button>
       
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-3 mb-2">
+      <div className="flex-1 min-w-0 grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+        <div className="md:col-span-2">
           <h4 className={cn(
-            "font-bold text-white text-lg truncate tracking-tight",
-            task.completed ? "line-through text-slate-500" : ""
+            "font-black text-black text-lg truncate tracking-tight uppercase",
+            task.completed ? "line-through text-black/40" : ""
           )}>
             {task.title}
           </h4>
+        </div>
+        <div className="flex items-center gap-6 text-[10px] font-black text-black/40 uppercase tracking-widest">
+          <span className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-[#8B0000]" /> {format(parseISO(task.scheduledAt), 'MMM dd')}
+          </span>
+          <span className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-[#8B0000]" /> {format(parseISO(task.scheduledAt), 'HH:mm')}
+          </span>
+        </div>
+        <div className="flex items-center justify-between md:justify-end gap-4">
           <PriorityBadge priority={task.priority} />
+          <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
+            <button 
+              onClick={() => { setEditingTask(task); setShowForm(true); }}
+              className="p-2 text-black/40 hover:text-black hover:bg-white border-2 border-transparent hover:border-black transition-all"
+            >
+              <Edit2 className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={() => task.id && handleDelete(task.id)}
+              className="p-2 text-black/40 hover:text-[#8B0000] hover:bg-white border-2 border-transparent hover:border-black transition-all"
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-4 text-xs font-bold text-slate-500">
-          <span className="flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 text-indigo-400" /> {format(parseISO(task.scheduledAt), 'MMM dd')}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-violet-400" /> {format(parseISO(task.scheduledAt), 'HH:mm')}
-          </span>
-          {task.repeat !== 'none' && (
-            <span className="bg-white/5 text-slate-400 px-2 py-0.5 rounded-none uppercase tracking-widest text-[10px]">
-              {task.repeat}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
-        <button 
-          onClick={() => { setEditingTask(task); setShowForm(true); }}
-          className="p-3 text-slate-500 hover:text-indigo-400 hover:bg-white/5 rounded-none transition-all"
-        >
-          <Edit2 className="w-5 h-5" />
-        </button>
-        <button 
-          onClick={() => task.id && handleDelete(task.id)}
-          className="p-3 text-slate-500 hover:text-rose-500 hover:bg-rose-500/10 rounded-none transition-all"
-        >
-          <Trash2 className="w-5 h-5" />
-        </button>
       </div>
     </motion.div>
   );
@@ -100,6 +96,36 @@ function TaskItem({ task, toggleComplete, handleDelete, setEditingTask, setShowF
 export default function TaskManager({ tasks }: TaskManagerProps) {
   const [showForm, setShowForm] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | undefined>();
+  const [quickTask, setQuickTask] = useState({ title: '', date: format(new Date(), 'yyyy-MM-dd'), time: format(new Date(), 'HH:mm') });
+
+  const handleQuickAdd = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickTask.title) return;
+    const profile = storage.getCurrentUser();
+    if (!profile) return;
+
+    try {
+      const data = storage.getUserData(profile.uid);
+      const newTask: Task = {
+        id: Math.random().toString(36).substring(2, 15),
+        uid: profile.uid,
+        title: quickTask.title,
+        notes: '',
+        scheduledAt: new Date(`${quickTask.date}T${quickTask.time}`).toISOString(),
+        completed: false,
+        priority: 'medium',
+        repeat: 'none',
+        createdAt: new Date().toISOString(),
+      };
+      storage.setUserData(profile.uid, {
+        ...data,
+        tasks: [...data.tasks, newTask]
+      });
+      setQuickTask({ ...quickTask, title: '' });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const toggleComplete = async (task: Task) => {
     const profile = storage.getCurrentUser();
@@ -137,31 +163,62 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
     <div className="space-y-10 pb-10">
       <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
         <div>
-          <h2 className="text-3xl font-black text-white tracking-tight">Task Assistant</h2>
-          <p className="text-slate-500 text-sm font-medium mt-1">Plan your day and stay on track</p>
+          <h2 className="text-3xl font-black text-black tracking-tighter uppercase">Task Assistant</h2>
+          <p className="text-black/40 text-[10px] font-bold uppercase tracking-widest mt-1">Strategic planning and execution</p>
         </div>
         <button 
           onClick={() => { setEditingTask(undefined); setShowForm(true); }}
-          className="w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white px-8 py-4 rounded-none font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-3"
+          className="neo-button neo-button-primary px-10 py-5 flex items-center justify-center gap-4"
         >
           <Plus className="w-6 h-6" />
-          Add Task
+          Detailed Entry
         </button>
+      </div>
+
+      {/* Spreadsheet Style Quick Entry */}
+      <div className="bg-white border-2 border-black p-1">
+        <form onSubmit={handleQuickAdd} className="flex flex-col md:flex-row gap-px bg-black">
+          <input 
+            type="text"
+            placeholder="ENTER TASK TITLE (QUICK AUDIT)..."
+            value={quickTask.title}
+            onChange={(e) => setQuickTask({ ...quickTask, title: e.target.value })}
+            className="flex-1 p-5 bg-[#D1D1D1] outline-none font-black text-[10px] uppercase tracking-widest text-black placeholder-black/30"
+          />
+          <input 
+            type="date"
+            value={quickTask.date}
+            onChange={(e) => setQuickTask({ ...quickTask, date: e.target.value })}
+            className="w-full md:w-48 p-5 bg-[#D1D1D1] outline-none font-black text-[10px] text-black border-l border-black"
+          />
+          <input 
+            type="time"
+            value={quickTask.time}
+            onChange={(e) => setQuickTask({ ...quickTask, time: e.target.value })}
+            className="w-full md:w-40 p-5 bg-[#D1D1D1] outline-none font-black text-[10px] text-black border-l border-black"
+          />
+          <button 
+            type="submit"
+            className="bg-[#8B0000] text-white px-10 py-5 font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all border-2 border-transparent hover:border-black"
+          >
+            Commit Row
+          </button>
+        </form>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div className="space-y-10">
           <section>
-            <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-              <div className="p-1.5 bg-indigo-500/10 rounded-none">
-                <AlertCircle className="w-4 h-4 text-indigo-400" />
+            <h3 className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-6 flex items-center gap-4">
+              <div className="p-2 bg-[#8B0000] text-white border-2 border-black">
+                <AlertCircle className="w-4 h-4" />
               </div>
-              Today's Focus
+              Priority Focus
             </h3>
             <div className="space-y-4">
               {todayTasks.length === 0 ? (
-                <div className="glass-card p-12 text-center">
-                  <p className="text-slate-600 font-bold">No tasks for today. Relax!</p>
+                <div className="glass-card p-16 text-center border-dashed">
+                  <p className="text-black/30 font-black text-[10px] uppercase tracking-widest">No active tasks for current cycle</p>
                 </div>
               ) : (
                 todayTasks.map(task => (
@@ -179,16 +236,16 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
           </section>
 
           <section>
-            <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-              <div className="p-1.5 bg-violet-500/10 rounded-none">
-                <Calendar className="w-4 h-4 text-violet-400" />
+            <h3 className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-6 flex items-center gap-4">
+              <div className="p-2 bg-white text-black border-2 border-black">
+                <Calendar className="w-4 h-4" />
               </div>
-              Upcoming
+              Future Pipeline
             </h3>
             <div className="space-y-4">
               {upcomingTasks.length === 0 ? (
-                <div className="glass-card p-12 text-center">
-                  <p className="text-slate-600 font-bold">No upcoming tasks scheduled.</p>
+                <div className="glass-card p-16 text-center border-dashed">
+                  <p className="text-black/30 font-black text-[10px] uppercase tracking-widest">Pipeline clear</p>
                 </div>
               ) : (
                 upcomingTasks.map(task => (
@@ -208,16 +265,16 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
 
         <div className="space-y-10">
           <section>
-            <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-              <div className="p-1.5 bg-emerald-500/10 rounded-none">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <h3 className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-6 flex items-center gap-4">
+              <div className="p-2 bg-emerald-50 text-emerald-700 border-2 border-black">
+                <CheckCircle2 className="w-4 h-4" />
               </div>
-              Recently Completed
+              Audit History
             </h3>
             <div className="space-y-4">
               {completedTasks.length === 0 ? (
-                <div className="glass-card p-12 text-center">
-                  <p className="text-slate-600 font-bold">Finish some tasks to see them here!</p>
+                <div className="glass-card p-16 text-center border-dashed">
+                  <p className="text-black/30 font-black text-[10px] uppercase tracking-widest">No history recorded</p>
                 </div>
               ) : (
                 completedTasks.slice(0, 5).map(task => (
@@ -234,22 +291,22 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
             </div>
           </section>
 
-          <div className="relative overflow-hidden rounded-none bg-gradient-to-br from-indigo-600 to-violet-800 p-10 text-white shadow-2xl shadow-indigo-500/20">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-none blur-2xl -mr-16 -mt-16" />
-            <ListTodo className="w-12 h-12 mb-6 text-indigo-200" />
-            <h3 className="text-2xl font-black mb-3 tracking-tight">Smart Assistant</h3>
-            <p className="text-indigo-100/80 font-medium leading-relaxed mb-8">
-              I'll notify you at the exact time of your tasks. High priority tasks will trigger a more urgent alert.
+          <div className="relative overflow-hidden bg-[#8B0000] p-12 text-white border-2 border-black">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 -mr-16 -mt-16 rotate-45" />
+            <ListTodo className="w-12 h-12 mb-8 text-white" />
+            <h3 className="text-2xl font-black mb-4 tracking-tighter uppercase">System Integrity</h3>
+            <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest leading-relaxed mb-10">
+              Operational status: Optimal. All tasks are synchronized with the central audit core.
             </p>
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-12">
               <div className="flex flex-col">
-                <span className="text-indigo-200 text-[10px] font-black uppercase tracking-widest mb-1">Pending</span>
-                <span className="text-4xl font-black tracking-tighter">{tasks.filter(t => !t.completed).length}</span>
+                <span className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-2">Active</span>
+                <span className="text-5xl font-black tracking-tighter">{tasks.filter(t => !t.completed).length}</span>
               </div>
-              <div className="w-px h-12 bg-white/20" />
+              <div className="w-px h-16 bg-white/10" />
               <div className="flex flex-col">
-                <span className="text-indigo-200 text-[10px] font-black uppercase tracking-widest mb-1">Completed</span>
-                <span className="text-4xl font-black tracking-tighter">{completedTasks.length}</span>
+                <span className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-2">Resolved</span>
+                <span className="text-5xl font-black tracking-tighter">{completedTasks.length}</span>
               </div>
             </div>
           </div>

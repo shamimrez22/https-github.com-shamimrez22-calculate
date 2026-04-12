@@ -5,6 +5,7 @@ import { Bell, AlertCircle, Lightbulb, CheckCircle, Trash2, MailOpen } from 'luc
 import { notificationService } from '../services/notificationService';
 import { motion, AnimatePresence } from 'motion/react';
 import { storage } from '../lib/storage';
+import { cn } from '../lib/utils';
 
 interface NotificationHistoryProps {
   notifications: AppNotification[];
@@ -35,22 +36,27 @@ export default function NotificationHistory({ notifications }: NotificationHisto
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10 pb-20">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-slate-900">Notification History</h2>
-        <span className="text-sm text-slate-500">{notifications.length} alerts</span>
+        <div>
+          <h2 className="text-3xl font-black text-black tracking-tighter uppercase">Alert Archive</h2>
+          <p className="text-black/40 text-[10px] font-black uppercase tracking-widest mt-1">System notification logs</p>
+        </div>
+        <div className="px-6 py-2 bg-[#8B0000] text-white border-2 border-black text-[10px] font-black uppercase tracking-widest">
+          {notifications.length} RECORDS
+        </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <AnimatePresence mode="popLayout">
           {notifications.length === 0 ? (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="bg-white p-12 rounded-3xl border border-dashed border-slate-200 text-center text-slate-400"
+              className="bg-white/10 p-20 border-4 border-dashed border-black/20 text-center"
             >
-              <Bell className="w-12 h-12 mx-auto mb-4 opacity-20" />
-              <p>No notifications yet. You're all caught up!</p>
+              <Bell className="w-16 h-16 mx-auto mb-6 text-black/10" />
+              <p className="text-black/40 font-black uppercase tracking-widest text-xs">Zero active alerts in buffer</p>
             </motion.div>
           ) : (
             notifications.map((notif) => {
@@ -62,34 +68,40 @@ export default function NotificationHistory({ notifications }: NotificationHisto
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className={`bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex gap-4 group relative ${!notif.read ? 'ring-2 ring-indigo-100' : ''}`}
+                  className={cn(
+                    "glass-card p-8 flex gap-8 group relative transition-all",
+                    !notif.read ? "border-black" : "opacity-70"
+                  )}
                 >
-                  <div className={`p-3 rounded-2xl h-fit ${config.bg} ${config.color}`}>
-                    <config.icon className="w-6 h-6" />
+                  <div className={cn(
+                    "p-5 border-2 h-fit",
+                    !notif.read ? "bg-[#8B0000] text-white border-black" : "bg-white/30 text-black/40 border-black/20"
+                  )}>
+                    <config.icon className="w-8 h-8" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-1">
-                      <h4 className="font-bold text-slate-900 truncate pr-8">{notif.title}</h4>
-                      <span className="text-xs text-slate-400 whitespace-nowrap">
-                        {format(new Date(notif.createdAt), 'MMM dd, HH:mm')}
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="text-xl font-black text-black uppercase tracking-tighter truncate pr-10">{notif.title}</h4>
+                      <span className="text-[10px] font-black text-black/40 uppercase tracking-widest whitespace-nowrap bg-white/30 px-3 py-1 border-2 border-black/10">
+                        {format(new Date(notif.createdAt), 'MMM dd | HH:mm')}
                       </span>
                     </div>
-                    <p className="text-slate-600 text-sm leading-relaxed">{notif.message}</p>
+                    <p className="text-black font-black text-sm leading-relaxed tracking-tight">{notif.message}</p>
                     
-                    <div className="flex gap-4 mt-4">
+                    <div className="flex gap-6 mt-6 pt-6 border-t-2 border-black/10">
                       {!notif.read && (
                         <button 
                           onClick={() => notif.id && notificationService.markAsRead(notif.id)}
-                          className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+                          className="neo-button px-4 py-2 text-[10px] flex items-center gap-2"
                         >
-                          <MailOpen className="w-3 h-3" /> Mark as Read
+                          <MailOpen className="w-4 h-4" /> Acknowledge
                         </button>
                       )}
                       <button 
                         onClick={() => notif.id && handleDelete(notif.id)}
-                        className="text-xs font-bold text-slate-400 hover:text-red-600 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="text-[10px] font-black text-[#8B0000] uppercase tracking-widest flex items-center gap-2 hover:bg-[#8B0000] hover:text-white px-4 py-2 border-2 border-[#8B0000] transition-all opacity-0 group-hover:opacity-100"
                       >
-                        <Trash2 className="w-3 h-3" /> Delete
+                        <Trash2 className="w-4 h-4" /> Purge
                       </button>
                     </div>
                   </div>

@@ -38,56 +38,56 @@ export default function AIInsights({ transactions, budgets }: AIInsightsProps) {
   }, [transactions.length]);
 
   return (
-    <div className="space-y-10 pb-10">
-      <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
+    <div className="space-y-12 pb-20">
+      <div className="flex flex-col md:flex-row gap-8 justify-between items-start md:items-center">
         <div>
-          <h2 className="text-3xl font-black text-white tracking-tight flex items-center gap-4">
-            <div className="p-2 bg-indigo-500/20 rounded-none">
-              <Sparkles className="w-8 h-8 text-indigo-400" />
+          <h2 className="text-3xl font-black text-black tracking-tighter uppercase flex items-center gap-6">
+            <div className="p-4 bg-[#8B0000] text-white border-2 border-black">
+              <Sparkles className="w-10 h-10" />
             </div>
-            AI Financial Assistant
+            AI Fiscal Intelligence
           </h2>
-          <p className="text-slate-500 text-sm font-medium mt-1">Smart predictions and insights powered by Gemini AI</p>
+          <p className="text-black/40 text-[10px] font-black uppercase tracking-widest mt-2">Predictive analytics powered by Gemini Neural Engine</p>
         </div>
         <button 
           onClick={fetchAIContent}
           disabled={loading}
-          className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-none text-sm font-bold text-white hover:bg-white/10 transition-all disabled:opacity-50"
+          className="neo-button neo-button-primary px-8 py-4 flex items-center gap-4"
         >
-          <RefreshCw className={cn("w-5 h-5 text-indigo-400", loading && "animate-spin")} />
-          Refresh Analysis
+          <RefreshCw className={cn("w-6 h-6", loading && "animate-spin")} />
+          Re-Analyze Dataset
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* Prediction Card */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="lg:col-span-1 relative overflow-hidden rounded-none bg-gradient-to-br from-indigo-600 to-violet-800 p-10 text-white shadow-2xl shadow-indigo-500/20"
+          className="lg:col-span-1 relative overflow-hidden bg-[#8B0000] p-12 text-white border-2 border-black"
         >
-          <Brain className="absolute -right-8 -top-8 w-48 h-48 text-white/10 blur-xl" />
+          <Brain className="absolute -right-12 -top-12 w-64 h-64 text-white/5 blur-2xl" />
           <div className="relative z-10">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-indigo-200 mb-4">Next Month Prediction</h3>
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/60 mb-6">Projected Expenditure (Next Cycle)</p>
             {loading ? (
-              <div className="flex flex-col gap-4 py-8">
-                <Loader2 className="w-10 h-10 animate-spin text-indigo-200" />
-                <span className="text-lg font-bold text-indigo-100">Analyzing patterns...</span>
+              <div className="flex flex-col gap-6 py-12">
+                <Loader2 className="w-12 h-12 animate-spin text-white" />
+                <span className="text-xl font-black uppercase tracking-widest">Processing Neural Patterns...</span>
               </div>
             ) : prediction ? (
               <>
-                <div className="text-5xl font-black tracking-tighter mb-6">${prediction.predictedAmount.toLocaleString()}</div>
-                <div className="flex items-center gap-3 text-xs font-black uppercase tracking-widest bg-white/10 w-fit px-4 py-2 rounded-none border border-white/10">
-                  <TrendingUp className="w-4 h-4 text-emerald-400" />
-                  <span>{Math.round(prediction.confidence * 100)}% Confidence</span>
+                <div className="text-6xl font-black tracking-tighter mb-8">৳{prediction.predictedAmount.toLocaleString()}</div>
+                <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest bg-white/10 w-fit px-6 py-3 border-2 border-white/20">
+                  <TrendingUp className="w-5 h-5 text-emerald-400" />
+                  <span>{Math.round(prediction.confidence * 100)}% Confidence Rating</span>
                 </div>
-                <p className="mt-10 text-sm font-medium text-indigo-100/70 leading-relaxed">
-                  Based on your spending history, AI predicts your expenses will be around this amount next month.
+                <p className="mt-12 text-xs font-black uppercase tracking-widest text-white/60 leading-relaxed">
+                  Historical pattern analysis indicates a high probability of this expenditure volume in the upcoming fiscal period.
                 </p>
               </>
             ) : (
-              <div className="py-10">
-                <p className="text-indigo-100/60 font-bold">Add more transactions for a prediction.</p>
+              <div className="py-12">
+                <p className="text-white/60 font-black uppercase tracking-widest">Insufficient data for neural projection.</p>
               </div>
             )}
           </div>
@@ -97,24 +97,25 @@ export default function AIInsights({ transactions, budgets }: AIInsightsProps) {
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="lg:col-span-2 glass-card p-10"
+          className="lg:col-span-2 glass-card p-12 relative overflow-hidden"
         >
-          <h3 className="text-xl font-black text-white uppercase tracking-wider mb-8 flex items-center gap-4">
-            <div className="p-2 bg-amber-500/10 rounded-none">
-              <Lightbulb className="w-6 h-6 text-amber-400" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-black/5 -mr-16 -mt-16 rotate-45" />
+          <h3 className="text-2xl font-black text-black tracking-tighter uppercase mb-10 flex items-center gap-6">
+            <div className="p-4 bg-white/30 border-2 border-black">
+              <Lightbulb className="w-8 h-8 text-[#8B0000]" />
             </div>
-            Smart Insights
+            Strategic Intelligence
           </h3>
           {loading ? (
-            <div className="space-y-6">
+            <div className="space-y-8">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className="h-16 bg-white/5 rounded-none animate-pulse" />
+                <div key={i} className="h-20 bg-black/5 border-2 border-black/10 animate-pulse" />
               ))}
             </div>
           ) : (
-            <div className="prose prose-invert max-w-none">
-              <div className="whitespace-pre-wrap text-slate-400 font-medium leading-relaxed text-lg">
-                {insights || "No insights available yet. Keep tracking your expenses to get personalized financial advice!"}
+            <div className="prose max-w-none">
+              <div className="whitespace-pre-wrap text-black font-black leading-relaxed text-xl tracking-tight">
+                {insights || "No strategic intelligence available. Continue data ingestion for personalized fiscal guidance."}
               </div>
             </div>
           )}

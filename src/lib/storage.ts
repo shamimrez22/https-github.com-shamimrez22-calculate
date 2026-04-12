@@ -59,7 +59,7 @@ class StorageService {
     }
 
     // Check if email is already taken
-    const emailExists = Object.values(users).some(u => u.profile.email.toLowerCase() === email.toLowerCase());
+    const emailExists = Object.values(users).some(u => u.profile?.email?.toLowerCase() === email.toLowerCase());
     if (emailExists) {
       throw new Error('Email already registered');
     }

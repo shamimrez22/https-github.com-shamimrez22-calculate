@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { storage } from '../lib/storage';
 import { Asset } from '../types';
-import { Briefcase, Plus, TrendingUp, TrendingDown, Trash2, Loader2, DollarSign, BarChart3 } from 'lucide-react';
+import { Briefcase, Plus, TrendingUp, TrendingDown, Trash2, Loader2, DollarSign, BarChart3, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { cn } from '../lib/utils';
 
 export default function Portfolio({ assets }: { assets: Asset[] }) {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -65,57 +66,68 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
   const profitPercent = totalCost > 0 ? (totalProfit / totalCost) * 100 : 0;
 
   return (
-    <div className="space-y-8 pb-20">
+    <div className="space-y-10 pb-20">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-black text-white tracking-tight uppercase">Portfolio</h2>
-          <p className="text-slate-500 text-sm font-bold mt-1 uppercase tracking-widest">Track your assets and investments</p>
+          <h2 className="text-3xl font-black text-black tracking-tighter uppercase">Portfolio</h2>
+          <p className="text-black/40 text-[10px] font-bold uppercase tracking-widest mt-1">Asset management and valuation</p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-none font-black uppercase tracking-widest text-xs transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2"
+          className="neo-button neo-button-primary px-8 py-4 flex items-center gap-4"
         >
-          <Plus className="w-4 h-4" /> Add Asset
+          <Plus className="w-5 h-5" /> Add Asset
         </button>
       </div>
 
       {/* Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="glass-card p-8 border-l-4 border-l-indigo-500">
-          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Total Portfolio Value</p>
-          <h4 className="text-4xl font-black text-white">${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h4>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="bg-[#D1D1D1] p-10 border-2 border-black relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-black/5 -mr-12 -mt-12 rotate-45" />
+          <p className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-4">Total Portfolio Value</p>
+          <h4 className="text-5xl font-black text-black tracking-tighter">৳{totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h4>
         </div>
-        <div className={`glass-card p-8 border-l-4 ${totalProfit >= 0 ? 'border-l-emerald-500' : 'border-l-rose-500'}`}>
-          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Total Profit/Loss</p>
-          <div className="flex items-baseline gap-3">
-            <h4 className={`text-4xl font-black ${totalProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-              {totalProfit >= 0 ? '+' : ''}${totalProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+        <div className={cn(
+          "bg-[#D1D1D1] p-10 border-2 relative overflow-hidden",
+          totalProfit >= 0 ? "border-emerald-700" : "border-[#8B0000]"
+        )}>
+          <div className="absolute top-0 right-0 w-24 h-24 bg-current opacity-5 -mr-12 -mt-12 rotate-45" />
+          <p className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-4">Strategic Yield (P/L)</p>
+          <div className="flex items-baseline gap-4">
+            <h4 className={cn(
+              "text-5xl font-black tracking-tighter",
+              totalProfit >= 0 ? "text-emerald-700" : "text-[#8B0000]"
+            )}>
+              {totalProfit >= 0 ? '+' : ''}৳{totalProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </h4>
-            <span className={`text-sm font-bold ${totalProfit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+            <span className={cn(
+              "text-xl font-black",
+              totalProfit >= 0 ? "text-emerald-700" : "text-[#8B0000]"
+            )}>
               ({profitPercent.toFixed(2)}%)
             </span>
           </div>
         </div>
       </div>
 
-      <div className="glass-card overflow-hidden">
+      <div className="bg-white/30 border-2 border-black overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/5 bg-white/5">
-                <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Asset</th>
-                <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Type</th>
-                <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Holdings</th>
-                <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Value</th>
-                <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">P/L</th>
-                <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
+              <tr className="bg-[#8B0000] text-white border-b-2 border-black">
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Asset Identification</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Classification</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-right">Holdings</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-right">Valuation</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-right">Yield</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y-2 divide-black/10">
               {assets.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-20 text-center text-slate-500 font-bold uppercase tracking-widest text-xs">
-                    No assets in your portfolio
+                  <td colSpan={6} className="px-8 py-32 text-center text-black/20 font-black uppercase tracking-widest">
+                    No assets recorded in current portfolio
                   </td>
                 </tr>
               ) : (
@@ -126,37 +138,43 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
                   const assetProfitPercent = (assetProfit / assetCost) * 100;
 
                   return (
-                    <tr key={asset.id} className="hover:bg-white/5 transition-colors">
-                      <td className="px-6 py-4">
-                        <span className="text-sm font-bold text-white uppercase tracking-tight">{asset.name}</span>
+                    <tr key={asset.id} className="hover:bg-white/50 transition-colors">
+                      <td className="px-8 py-6">
+                        <span className="text-lg font-black text-black uppercase tracking-tighter">{asset.name}</span>
                       </td>
-                      <td className="px-6 py-4">
-                        <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 bg-white/5 text-slate-400 border border-white/5">
+                      <td className="px-8 py-6">
+                        <span className="text-[10px] font-black uppercase tracking-widest px-4 py-1.5 bg-black text-white border-2 border-black rounded-none">
                           {asset.type}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <p className="text-sm font-bold text-white">{asset.quantity}</p>
-                        <p className="text-[10px] text-slate-500 font-medium">Avg: ${asset.purchasePrice}</p>
+                      <td className="px-8 py-6 text-right">
+                        <p className="text-lg font-black text-black tracking-tighter">{asset.quantity}</p>
+                        <p className="text-[10px] text-black/40 font-black uppercase tracking-widest">Avg: ৳{asset.purchasePrice}</p>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <p className="text-sm font-bold text-white">${assetValue.toLocaleString()}</p>
-                        <p className="text-[10px] text-slate-500 font-medium">Price: ${asset.value}</p>
+                      <td className="px-8 py-6 text-right">
+                        <p className="text-lg font-black text-black tracking-tighter">৳{assetValue.toLocaleString()}</p>
+                        <p className="text-[10px] text-black/40 font-black uppercase tracking-widest">Price: ৳{asset.value}</p>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <p className={`text-sm font-black ${assetProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                          {assetProfit >= 0 ? '+' : ''}${assetProfit.toLocaleString()}
+                      <td className="px-8 py-6 text-right">
+                        <p className={cn(
+                          "text-lg font-black tracking-tighter",
+                          assetProfit >= 0 ? "text-emerald-700" : "text-[#8B0000]"
+                        )}>
+                          {assetProfit >= 0 ? '+' : ''}৳{assetProfit.toLocaleString()}
                         </p>
-                        <p className={`text-[10px] font-bold ${assetProfit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                        <p className={cn(
+                          "text-[10px] font-black uppercase tracking-widest",
+                          assetProfit >= 0 ? "text-emerald-700" : "text-[#8B0000]"
+                        )}>
                           {assetProfitPercent.toFixed(1)}%
                         </p>
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-8 py-6 text-right">
                         <button 
                           onClick={() => handleDeleteAsset(asset.id)}
-                          className="p-2 text-slate-600 hover:text-rose-400 transition-colors"
+                          className="p-3 text-black/20 hover:text-[#8B0000] hover:bg-red-50 border-2 border-transparent hover:border-black rounded-none transition-all"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-6 h-6" />
                         </button>
                       </td>
                     </tr>
@@ -177,40 +195,40 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowAddModal(false)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/60 backdrop-blur-md"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg glass-card p-10 space-y-8"
+              className="relative w-full max-w-xl bg-[#E8C6B0] rounded-none p-12 space-y-10 border-2 border-black"
             >
               <div className="flex justify-between items-center">
-                <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Add New Asset</h3>
-                <button onClick={() => setShowAddModal(false)} className="text-slate-500 hover:text-white">
-                  <Plus className="w-6 h-6 rotate-45" />
+                <h3 className="text-3xl font-black text-black tracking-tighter uppercase">Add Asset</h3>
+                <button onClick={() => setShowAddModal(false)} className="p-3 hover:bg-white/50 rounded-none transition-colors border-2 border-transparent hover:border-black">
+                  <X className="w-8 h-8 text-black" />
                 </button>
               </div>
 
-              <form onSubmit={handleAddAsset} className="space-y-6">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Asset Name</label>
+              <form onSubmit={handleAddAsset} className="space-y-8">
+                <div className="grid grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="excel-label ml-1">Asset Name</label>
                     <input 
                       type="text"
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="E.G., APPLE, BITCOIN"
-                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none font-bold uppercase tracking-widest text-xs"
+                      className="excel-input"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Asset Type</label>
+                  <div className="space-y-3">
+                    <label className="excel-label ml-1">Asset Type</label>
                     <select 
                       value={type}
                       onChange={(e) => setType(e.target.value as any)}
-                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-none text-white focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-xs uppercase tracking-widest"
+                      className="excel-input"
                     >
                       <option value="Stock">Stock</option>
                       <option value="Crypto">Crypto</option>
@@ -221,9 +239,9 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Quantity</label>
+                <div className="grid grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="excel-label ml-1">Quantity</label>
                     <input 
                       type="number"
                       step="any"
@@ -231,11 +249,11 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
                       value={quantity}
                       onChange={(e) => setQuantity(e.target.value)}
                       placeholder="0.00"
-                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-xs"
+                      className="w-full px-6 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Purchase Price</label>
+                  <div className="space-y-3">
+                    <label className="excel-label ml-1">Purchase Price</label>
                     <input 
                       type="number"
                       step="any"
@@ -243,13 +261,13 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
                       value={purchasePrice}
                       onChange={(e) => setPurchasePrice(e.target.value)}
                       placeholder="0.00"
-                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-xs"
+                      className="w-full px-6 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Current Market Price</label>
+                <div className="space-y-3">
+                  <label className="excel-label ml-1">Current Market Price</label>
                   <input 
                     type="number"
                     step="any"
@@ -257,15 +275,15 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="0.00"
-                    className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-xs"
+                    className="w-full px-6 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-2xl tracking-tighter"
                   />
                 </div>
 
                 <button 
                   disabled={loading}
-                  className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-5 rounded-none font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-3 disabled:opacity-50"
+                  className="neo-button neo-button-primary w-full py-6 flex items-center justify-center gap-4 disabled:opacity-50"
                 >
-                  {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Add to Portfolio'}
+                  {loading ? <Loader2 className="w-8 h-8 animate-spin" /> : 'Commit Asset'}
                 </button>
               </form>
             </motion.div>

@@ -62,56 +62,56 @@ export default function BudgetManager({ budgets, transactions }: BudgetManagerPr
     <div className="space-y-10 pb-10">
       <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
         <div>
-          <h2 className="text-3xl font-black text-white tracking-tight">Budget Management</h2>
-          <p className="text-slate-500 text-sm font-medium mt-1">Set and monitor your monthly spending limits</p>
+          <h2 className="text-3xl font-black text-black tracking-tighter uppercase">Budget Management</h2>
+          <p className="text-black/40 text-[10px] font-bold uppercase tracking-widest mt-1">Set and monitor strategic spending limits</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Add Budget Form */}
         <div className="lg:col-span-1">
-          <div className="glass-card p-8 sticky top-8">
-            <h3 className="text-xl font-bold text-white mb-8 flex items-center gap-3">
-              <div className="p-2 bg-indigo-500/10 rounded-none">
-                <Plus className="w-5 h-5 text-indigo-400" />
+          <div className="glass-card p-10 sticky top-8">
+            <h3 className="text-xl font-black text-black mb-10 flex items-center gap-4 uppercase tracking-tighter">
+              <div className="p-2 bg-[#8B0000] text-white border-2 border-black">
+                <Plus className="w-6 h-6" />
               </div>
-              New Budget
+              New Limit
             </h3>
-            <form onSubmit={handleAddBudget} className="space-y-6">
+            <form onSubmit={handleAddBudget} className="space-y-8">
               <div className="space-y-3">
-                <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Category</label>
+                <label className="excel-label ml-1">Sector</label>
                 <select 
                   value={category}
                   onChange={(e) => setCategory(e.target.value as Category)}
-                  className="w-full p-4 bg-white/5 border border-white/10 rounded-none text-white outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                  className="excel-input"
                 >
                   {CATEGORIES.map(cat => (
-                    <option key={cat} value={cat} className="bg-slate-900">{cat}</option>
+                    <option key={cat} value={cat} className="bg-white">{cat}</option>
                   ))}
                 </select>
               </div>
               <div className="space-y-3">
-                <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Monthly Limit ($)</label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">$</span>
+                <label className="excel-label ml-1">Monthly Threshold (৳)</label>
+                <div className="relative group">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black font-black text-xl">৳</span>
                   <input 
                     type="number" 
                     required
                     value={limit}
                     onChange={(e) => setLimit(e.target.value)}
                     placeholder="0.00"
-                    className="w-full pl-8 pr-4 py-4 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-bold"
+                    className="w-full pl-10 pr-4 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-2xl tracking-tighter"
                   />
                 </div>
               </div>
               <button 
                 disabled={loading}
-                className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-4 rounded-none font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-3 disabled:opacity-50"
+                className="neo-button neo-button-primary w-full py-5 flex items-center justify-center gap-4"
               >
-                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
+                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                   <>
-                    <Target className="w-5 h-5" />
-                    Set Budget
+                    <Target className="w-6 h-6" />
+                    Initialize Budget
                   </>
                 )}
               </button>
@@ -120,13 +120,13 @@ export default function BudgetManager({ budgets, transactions }: BudgetManagerPr
         </div>
 
         {/* Budget List */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-8">
           {budgets.length === 0 ? (
-            <div className="glass-card p-20 text-center">
-              <div className="w-20 h-20 bg-white/5 rounded-none flex items-center justify-center mx-auto mb-6">
-                <Target className="w-10 h-10 text-slate-700" />
+            <div className="glass-card p-32 text-center">
+              <div className="w-24 h-24 bg-white/30 rounded-none flex items-center justify-center mx-auto mb-8 border-2 border-black">
+                <Target className="w-12 h-12 text-black/20" />
               </div>
-              <p className="text-slate-500 font-bold">No budgets set yet. Start tracking your limits!</p>
+              <p className="text-black/40 font-black uppercase tracking-widest">No strategic limits defined</p>
             </div>
           ) : (
             budgets.map(budget => {
@@ -140,50 +140,50 @@ export default function BudgetManager({ budgets, transactions }: BudgetManagerPr
                 <motion.div 
                   layout
                   key={budget.id} 
-                  className="glass-card p-8 group relative overflow-hidden"
+                  className="glass-card p-10 group relative overflow-hidden"
                 >
-                  {isOver && <div className="absolute top-0 left-0 w-1 h-full bg-rose-500" />}
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="space-y-1">
-                      <h4 className="text-xl font-black text-white uppercase tracking-wider">{budget.category}</h4>
-                      <div className="flex items-center gap-3">
-                        <span className="text-slate-500 text-sm font-medium">Spent: <strong className="text-white">${spent.toLocaleString()}</strong></span>
-                        <div className="w-1 h-1 bg-slate-700 rounded-none" />
-                        <span className="text-slate-500 text-sm font-medium">Limit: <strong className="text-slate-400">${budget.limit.toLocaleString()}</strong></span>
+                  {isOver && <div className="absolute top-0 left-0 w-2 h-full bg-[#8B0000]" />}
+                  <div className="flex justify-between items-start mb-8">
+                    <div className="space-y-2">
+                      <h4 className="text-2xl font-black text-black tracking-tighter uppercase">{budget.category}</h4>
+                      <div className="flex items-center gap-6">
+                        <span className="text-black/40 text-[10px] font-black uppercase tracking-widest">Utilized: <strong className="text-black">৳{spent.toLocaleString()}</strong></span>
+                        <div className="w-1.5 h-1.5 bg-black rounded-none" />
+                        <span className="text-black/40 text-[10px] font-black uppercase tracking-widest">Threshold: <strong className="text-black">৳{budget.limit.toLocaleString()}</strong></span>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end gap-2">
+                    <div className="flex flex-col items-end gap-4">
                       <span className={cn(
-                        "px-3 py-1 rounded-none text-xs font-black tracking-widest uppercase",
-                        percent >= 90 ? "bg-rose-500/20 text-rose-400" : percent >= 75 ? "bg-amber-500/20 text-amber-400" : "bg-indigo-500/20 text-indigo-400"
+                        "px-4 py-1.5 rounded-none text-[10px] font-black tracking-widest uppercase border-2",
+                        percent >= 90 ? "bg-rose-50 text-[#8B0000] border-[#8B0000]" : "bg-white text-black border-black"
                       )}>
-                        {Math.round(percent)}%
+                        {Math.round(percent)}% UTILIZED
                       </span>
                       <button 
                         onClick={() => budget.id && handleDelete(budget.id)}
-                        className="p-2 text-slate-600 hover:text-rose-500 hover:bg-rose-500/10 rounded-none transition-all opacity-0 group-hover:opacity-100"
+                        className="p-3 text-black/20 hover:text-[#8B0000] hover:bg-white border-2 border-transparent hover:border-black rounded-none transition-all opacity-0 group-hover:opacity-100"
                       >
-                        <Trash2 className="w-5 h-5" />
+                        <Trash2 className="w-6 h-6" />
                       </button>
                     </div>
                   </div>
                   
-                  <div className="space-y-2">
-                    <div className="h-3 bg-white/5 rounded-none overflow-hidden">
+                  <div className="space-y-4">
+                    <div className="h-6 bg-white/30 rounded-none border-2 border-black p-0.5">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${percent}%` }}
                         className={cn(
                           "h-full rounded-none transition-all duration-1000",
-                          percent >= 90 ? "bg-rose-500" : percent >= 75 ? "bg-amber-500" : "bg-indigo-500"
+                          percent >= 90 ? "bg-[#8B0000]" : "bg-black"
                         )}
                       />
                     </div>
                     {isOver && (
-                      <p className="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em] flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" />
-                        Budget Exceeded by ${(spent - budget.limit).toLocaleString()}
-                      </p>
+                      <div className="p-4 bg-rose-50 border-2 border-[#8B0000] text-[10px] font-black text-[#8B0000] uppercase tracking-widest flex items-center gap-3">
+                        <AlertCircle className="w-5 h-5" />
+                        Critical: Threshold exceeded by ৳{(spent - budget.limit).toLocaleString()}
+                      </div>
                     )}
                   </div>
                 </motion.div>

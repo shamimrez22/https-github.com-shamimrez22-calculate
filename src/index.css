@@ -2,12 +2,12 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-brand-primary: #6366f1;
-  --color-brand-secondary: #8b5cf6;
-  --color-brand-accent: #f43f5e;
+  --color-brand-primary: #8B0000;
+  --color-brand-secondary: #E8C6B0;
+  --color-brand-accent: #D1D1D1;
   
   --radius-3xl: 0px;
   --radius-4xl: 0px;
@@ -21,56 +21,75 @@
 
 @layer base {
   body {
-    @apply bg-[#000000] text-slate-200 antialiased;
+    @apply bg-[#E8C6B0] text-slate-900 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-transparent;
+    @apply bg-[#E8C6B0] border-l border-[#8B0000];
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-800 rounded-none hover:bg-slate-700 transition-colors;
+    @apply bg-[#8B0000] hover:bg-[#660000] transition-colors;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl;
+    @apply bg-[#E8C6B0] border-2 border-[#8B0000] rounded-none;
   }
   
   .glass-card-hover {
-    @apply hover:bg-white/10 hover:border-white/20 transition-all duration-300;
+    @apply hover:bg-white/10 transition-all duration-200;
   }
 
   .neo-button {
-    @apply relative overflow-hidden transition-all duration-300 active:scale-95;
+    @apply relative overflow-hidden transition-all duration-200 rounded-none border-2 border-black bg-white text-black hover:bg-[#D1D1D1] font-black uppercase tracking-widest text-[11px] px-6 py-3;
   }
 
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400;
+  .neo-button-primary {
+    @apply bg-[#8B0000] text-white hover:bg-[#660000];
+  }
+
+  .excel-input {
+    @apply w-full px-4 py-2 bg-[#D1D1D1] border-2 border-black rounded-none text-black outline-none font-bold text-sm focus:bg-white transition-all;
+  }
+
+  .excel-label {
+    @apply text-xs font-black uppercase tracking-wider text-black mb-1 block;
+  }
+
+  .header-strip {
+    @apply bg-[#8B0000] text-white px-4 py-2 font-black uppercase tracking-widest text-xs border-2 border-black;
+  }
+
+  .grid-bg {
+    background-image: linear-gradient(rgba(139, 0, 0, 0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(139, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
   }
 }
 
 /* Recharts Customization */
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
-  stroke: rgba(255, 255, 255, 0.05);
+  stroke: #f1f5f9;
 }
 
 .recharts-text {
   fill: #94a3b8 !important;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .recharts-tooltip-cursor {
-  fill: rgba(255, 255, 255, 0.05);
+  fill: #f8fafc;
 }
 
 .recharts-default-tooltip {
-  @apply !bg-slate-900/90 !border-slate-800 !rounded-none !shadow-2xl !p-4 !backdrop-blur-xl;
+  @apply !bg-white !border-slate-900 !rounded-none !p-4 !border-2;
 }

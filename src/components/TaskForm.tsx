@@ -83,107 +83,107 @@ export default function TaskForm({ onClose, task }: TaskFormProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="glass-card w-full max-w-lg rounded-none shadow-2xl overflow-hidden"
+        className="bg-[#E8C6B0] w-full max-w-lg rounded-none overflow-hidden border-2 border-black"
       >
         <div className="p-8">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-indigo-500/10 rounded-none text-indigo-400">
+              <div className="p-3 bg-[#8B0000] rounded-none text-white border-2 border-black">
                 <ListTodo className="w-6 h-6" />
               </div>
-              <h2 className="text-2xl font-black text-white uppercase tracking-tight">{task ? 'Edit Task' : 'New Task'}</h2>
+              <h2 className="text-2xl font-black text-black tracking-tighter uppercase">{task ? 'Edit Task' : 'New Task'}</h2>
             </div>
-            <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-none transition-colors">
-              <X className="w-6 h-6 text-slate-500" />
+            <button onClick={onClose} className="p-2 hover:bg-white/50 rounded-none transition-colors border-2 border-transparent hover:border-black">
+              <X className="w-6 h-6 text-black" />
             </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Task Title</label>
+              <label className="excel-label ml-1">Task Title</label>
               <input 
                 type="text" 
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Pay Electricity Bill"
-                className="w-full p-4 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-bold"
+                className="excel-input"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-indigo-400" /> Date
+                <label className="excel-label ml-1 flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-[#8B0000]" /> Date
                 </label>
                 <input 
                   type="date" 
                   required
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full p-4 bg-white/5 border border-white/10 rounded-none text-white outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-bold"
+                  className="excel-input"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1 flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-violet-400" /> Time
+                <label className="excel-label ml-1 flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-[#8B0000]" /> Time
                 </label>
                 <input 
                   type="time" 
                   required
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  className="w-full p-4 bg-white/5 border border-white/10 rounded-none text-white outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-bold"
+                  className="excel-input"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Priority</label>
+                <label className="excel-label ml-1">Priority</label>
                 <select 
                   value={priority}
                   onChange={(e) => setPriority(e.target.value as Task['priority'])}
-                  className="w-full p-4 bg-white/5 border border-white/10 rounded-none text-white outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-bold"
+                  className="excel-input"
                 >
-                  <option value="low" className="bg-slate-900">Low</option>
-                  <option value="medium" className="bg-slate-900">Medium</option>
-                  <option value="high" className="bg-slate-900">High</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Repeat</label>
+                <label className="excel-label ml-1">Repeat</label>
                 <select 
                   value={repeat}
                   onChange={(e) => setRepeat(e.target.value as Task['repeat'])}
-                  className="w-full p-4 bg-white/5 border border-white/10 rounded-none text-white outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-bold"
+                  className="excel-input"
                 >
-                  <option value="none" className="bg-slate-900">None</option>
-                  <option value="daily" className="bg-slate-900">Daily</option>
-                  <option value="weekly" className="bg-slate-900">Weekly</option>
+                  <option value="none">None</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
                 </select>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Notes (Optional)</label>
+              <label className="excel-label ml-1">Notes (Optional)</label>
               <textarea 
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Add some details..."
-                className="w-full p-4 bg-white/5 border border-white/10 rounded-none text-white placeholder-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 transition-all h-24 resize-none font-medium"
+                className="excel-input h-24 resize-none"
               />
             </div>
 
             <button 
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-500 text-white py-4 rounded-none font-black uppercase tracking-widest hover:bg-indigo-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 disabled:opacity-70"
+              className="neo-button neo-button-primary w-full py-4 flex items-center justify-center gap-2"
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (task ? 'Update Task' : 'Schedule Task')}
             </button>
