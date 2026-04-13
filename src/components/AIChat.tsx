@@ -5,6 +5,7 @@ import { Sparkles, Send, Loader2, User, Bot, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { GoogleGenAI } from "@google/genai";
 import { cn } from '../lib/utils';
+import VoiceInput from './VoiceInput';
 
 export default function AIChat({ transactions, budgets }: { transactions: Transaction[], budgets: Budget[] }) {
   const [messages, setMessages] = useState<{ role: 'user' | 'assistant', content: string }[]>([]);
@@ -74,7 +75,7 @@ export default function AIChat({ transactions, budgets }: { transactions: Transa
         </div>
         <button 
           onClick={clearChat}
-          className="p-4 text-black/40 hover:text-[#8B0000] hover:bg-red-50 border-2 border-transparent hover:border-[#8B0000] rounded-none transition-all"
+          className="p-4 text-black/40 hover:text-[#2FA084] hover:bg-red-50 border-2 border-transparent hover:border-[#2FA084] rounded-none transition-all"
           title="Clear Buffer"
         >
           <Trash2 className="w-6 h-6" />
@@ -88,7 +89,7 @@ export default function AIChat({ transactions, budgets }: { transactions: Transa
         >
           {messages.length === 0 && (
             <div className="h-full flex flex-col items-center justify-center text-center space-y-8 opacity-30">
-              <div className="w-24 h-24 bg-[#8B0000] text-white border-2 border-black rounded-none flex items-center justify-center">
+              <div className="w-24 h-24 bg-[#2FA084] text-white border-2 border-black rounded-none flex items-center justify-center">
                 <Sparkles className="w-12 h-12" />
               </div>
               <div className="max-w-md">
@@ -112,13 +113,13 @@ export default function AIChat({ transactions, budgets }: { transactions: Transa
               <div className={`flex gap-6 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                 <div className={cn(
                   "w-12 h-12 shrink-0 flex items-center justify-center border-2 rounded-none",
-                  msg.role === 'user' ? "bg-[#8B0000] border-black text-white" : "bg-[#D1D1D1] border-black text-black"
+                  msg.role === 'user' ? "bg-[#2FA084] border-black text-white" : "bg-[#E2E8F0] border-black text-black"
                 )}>
                   {msg.role === 'user' ? <User className="w-6 h-6" /> : <Bot className="w-6 h-6" />}
                 </div>
                 <div className={cn(
                   "p-8 text-base leading-relaxed border-2 font-black tracking-tight",
-                  msg.role === 'user' ? "bg-[#8B0000] text-white border-black" : "bg-[#E8C6B0] text-black border-black"
+                  msg.role === 'user' ? "bg-[#2FA084] text-white border-black" : "bg-[#F0F9F6] text-black border-black"
                 )}>
                   {msg.content}
                 </div>
@@ -129,10 +130,10 @@ export default function AIChat({ transactions, budgets }: { transactions: Transa
           {loading && (
             <div className="flex justify-start">
               <div className="flex gap-6 max-w-[85%]">
-                <div className="w-12 h-12 shrink-0 bg-[#D1D1D1] border-2 border-black text-black flex items-center justify-center rounded-none">
+                <div className="w-12 h-12 shrink-0 bg-[#E2E8F0] border-2 border-black text-black flex items-center justify-center rounded-none">
                   <Bot className="w-6 h-6" />
                 </div>
-                <div className="p-8 bg-[#E8C6B0] border-2 border-black flex items-center gap-4">
+                <div className="p-8 bg-[#F0F9F6] border-2 border-black flex items-center gap-4">
                   <Loader2 className="w-6 h-6 animate-spin text-black" />
                   <span className="text-[10px] font-black text-black uppercase tracking-widest">Neural processing active...</span>
                 </div>
@@ -142,21 +143,29 @@ export default function AIChat({ transactions, budgets }: { transactions: Transa
         </div>
 
         <form onSubmit={handleSend} className="p-10 border-t-2 border-black bg-white/20">
-          <div className="relative">
-            <input 
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="ENTER FISCAL QUERY..."
-              className="excel-input pr-20"
-            />
-            <button 
-              type="submit"
-              disabled={!input.trim() || loading}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-[#8B0000] hover:bg-white hover:text-[#8B0000] text-white border-2 border-black rounded-none transition-all disabled:opacity-50"
-            >
-              <Send className="w-6 h-6" />
-            </button>
+          <div className="flex gap-4 items-end">
+            <div className="flex-1 relative">
+              <input 
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="ENTER FISCAL QUERY..."
+                className="excel-input pr-4"
+              />
+            </div>
+            <div className="flex gap-2">
+              <button 
+                type="submit"
+                disabled={!input.trim() || loading}
+                className="p-4 bg-[#2FA084] hover:bg-white hover:text-[#2FA084] text-white border-2 border-black rounded-none transition-all disabled:opacity-50 flex items-center justify-center"
+              >
+                <Send className="w-6 h-6" />
+              </button>
+              <div className="flex flex-col gap-2">
+                <VoiceInput onResult={(text) => setInput(prev => prev ? `${prev} ${text}` : text)} language="bn-BD" />
+                <VoiceInput onResult={(text) => setInput(prev => prev ? `${prev} ${text}` : text)} language="en-US" />
+              </div>
+            </div>
           </div>
         </form>
       </div>

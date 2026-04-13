@@ -42,7 +42,7 @@ export default function AIInsights({ transactions, budgets }: AIInsightsProps) {
       <div className="flex flex-col md:flex-row gap-8 justify-between items-start md:items-center">
         <div>
           <h2 className="text-3xl font-black text-black tracking-tighter uppercase flex items-center gap-6">
-            <div className="p-4 bg-[#8B0000] text-white border-2 border-black">
+            <div className="p-4 bg-[#2FA084] text-white border-2 border-black">
               <Sparkles className="w-10 h-10" />
             </div>
             AI Fiscal Intelligence
@@ -64,7 +64,7 @@ export default function AIInsights({ transactions, budgets }: AIInsightsProps) {
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="lg:col-span-1 relative overflow-hidden bg-[#8B0000] p-12 text-white border-2 border-black"
+          className="lg:col-span-1 relative overflow-hidden bg-[#2FA084] p-12 text-white border-2 border-black"
         >
           <Brain className="absolute -right-12 -top-12 w-64 h-64 text-white/5 blur-2xl" />
           <div className="relative z-10">
@@ -102,7 +102,7 @@ export default function AIInsights({ transactions, budgets }: AIInsightsProps) {
           <div className="absolute top-0 right-0 w-32 h-32 bg-black/5 -mr-16 -mt-16 rotate-45" />
           <h3 className="text-2xl font-black text-black tracking-tighter uppercase mb-10 flex items-center gap-6">
             <div className="p-4 bg-white/30 border-2 border-black">
-              <Lightbulb className="w-8 h-8 text-[#8B0000]" />
+              <Lightbulb className="w-8 h-8 text-[#2FA084]" />
             </div>
             Strategic Intelligence
           </h3>

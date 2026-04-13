@@ -50,8 +50,8 @@ export default function AdminPanel() {
           animate={{ opacity: 1, y: 0 }}
           className="glass-card p-12 text-center space-y-10"
         >
-          <div className="w-24 h-24 bg-red-50 rounded-none flex items-center justify-center mx-auto border-2 border-[#8B0000]">
-            <ShieldAlert className="w-12 h-12 text-[#8B0000]" />
+          <div className="w-24 h-24 bg-red-50 rounded-none flex items-center justify-center mx-auto border-2 border-[#2FA084]">
+            <ShieldAlert className="w-12 h-12 text-[#2FA084]" />
           </div>
           <div>
             <h2 className="text-3xl font-black text-black tracking-tighter uppercase">Restricted Access</h2>
@@ -59,7 +59,7 @@ export default function AdminPanel() {
           </div>
 
           {message.text && (
-            <div className="bg-red-50 text-[#8B0000] p-4 text-[10px] font-black uppercase tracking-widest border-2 border-[#8B0000] rounded-none">
+            <div className="bg-red-50 text-[#2FA084] p-4 text-[10px] font-black uppercase tracking-widest border-2 border-[#2FA084] rounded-none">
               {message.text}
             </div>
           )}
@@ -148,7 +148,7 @@ export default function AdminPanel() {
               exit={{ opacity: 0, x: 20 }}
               className={cn(
                 "text-[10px] font-black uppercase tracking-widest px-6 py-3 border-2 rounded-none",
-                message.type === 'error' ? "bg-red-50 text-[#8B0000] border-[#8B0000]" : "bg-emerald-50 text-emerald-700 border-emerald-700"
+                message.type === 'error' ? "bg-red-50 text-[#2FA084] border-[#2FA084]" : "bg-emerald-50 text-emerald-700 border-emerald-700"
               )}
             >
               {message.text}
@@ -159,10 +159,10 @@ export default function AdminPanel() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div className="bg-[#D1D1D1] p-8 border-2 border-black relative overflow-hidden">
+        <div className="bg-[#E2E8F0] p-8 border-2 border-black relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-black/5 -mr-12 -mt-12 rotate-45" />
           <div className="flex items-center gap-6 relative z-10">
-            <div className="p-4 bg-[#8B0000] text-white border-2 border-black">
+            <div className="p-4 bg-[#2FA084] text-white border-2 border-black">
               <Users className="w-8 h-8" />
             </div>
             <div>
@@ -171,19 +171,19 @@ export default function AdminPanel() {
             </div>
           </div>
         </div>
-        <div className="bg-[#D1D1D1] p-8 border-2 border-[#8B0000] relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-[#8B0000]/5 -mr-12 -mt-12 rotate-45" />
+        <div className="bg-[#E2E8F0] p-8 border-2 border-[#2FA084] relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-[#2FA084]/5 -mr-12 -mt-12 rotate-45" />
           <div className="flex items-center gap-6 relative z-10">
-            <div className="p-4 bg-red-50 text-[#8B0000] border-2 border-[#8B0000]">
+            <div className="p-4 bg-red-50 text-[#2FA084] border-2 border-[#2FA084]">
               <Lock className="w-8 h-8" />
             </div>
             <div>
               <p className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-2">Locked Accounts</p>
-              <h4 className="text-4xl font-black text-[#8B0000] tracking-tighter">{users.filter(u => u.isLocked).length}</h4>
+              <h4 className="text-4xl font-black text-[#2FA084] tracking-tighter">{users.filter(u => u.isLocked).length}</h4>
             </div>
           </div>
         </div>
-        <div className="bg-[#D1D1D1] p-8 border-2 border-emerald-700 relative overflow-hidden">
+        <div className="bg-[#E2E8F0] p-8 border-2 border-emerald-700 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-700/5 -mr-12 -mt-12 rotate-45" />
           <div className="flex items-center gap-6 relative z-10">
             <div className="p-4 bg-emerald-50 text-emerald-700 border-2 border-emerald-700">
@@ -201,7 +201,7 @@ export default function AdminPanel() {
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <h3 className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-3">
-            <Users className="w-5 h-5 text-[#8B0000]" /> User Directory
+            <Users className="w-5 h-5 text-[#2FA084]" /> User Directory
           </h3>
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-black w-5 h-5" />
@@ -219,7 +219,7 @@ export default function AdminPanel() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-[#8B0000] text-white">
+                <tr className="bg-[#2FA084] text-white">
                   <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">User Identification</th>
                   <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Email Address</th>
                   <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Privilege Level</th>
@@ -232,7 +232,7 @@ export default function AdminPanel() {
                   <tr key={user.uid} className="hover:bg-white/10 transition-colors">
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-[#8B0000] text-white border-2 border-black rounded-none flex items-center justify-center font-black text-xs uppercase">
+                        <div className="w-10 h-10 bg-[#2FA084] text-white border-2 border-black rounded-none flex items-center justify-center font-black text-xs uppercase">
                           {user.username[0].toUpperCase()}
                         </div>
                         <span className="text-lg font-black text-black uppercase tracking-tighter">{user.username}</span>
@@ -244,7 +244,7 @@ export default function AdminPanel() {
                     <td className="px-8 py-6">
                       <span className={cn(
                         "text-[10px] font-black uppercase tracking-widest px-4 py-1.5 border-2 rounded-none",
-                        user.role === 'admin' ? "text-white bg-[#8B0000] border-black" : "text-black/40 bg-white/30 border-black/10"
+                        user.role === 'admin' ? "text-white bg-[#2FA084] border-black" : "text-black/40 bg-white/30 border-black/10"
                       )}>
                         {user.role}
                       </span>
@@ -252,7 +252,7 @@ export default function AdminPanel() {
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-3">
                         {user.isLocked ? (
-                          <span className="flex items-center gap-2 text-[#8B0000] text-[10px] font-black uppercase tracking-widest bg-red-50 px-3 py-1.5 border-2 border-[#8B0000]">
+                          <span className="flex items-center gap-2 text-[#2FA084] text-[10px] font-black uppercase tracking-widest bg-red-50 px-3 py-1.5 border-2 border-[#2FA084]">
                             <XCircle className="w-4 h-4" /> Locked
                           </span>
                         ) : (
@@ -286,7 +286,7 @@ export default function AdminPanel() {
       {/* Admin Security */}
       <section className="space-y-6">
         <h3 className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-3">
-          <Key className="w-5 h-5 text-[#8B0000]" /> Security Protocols
+          <Key className="w-5 h-5 text-[#2FA084]" /> Security Protocols
         </h3>
         <div className="glass-card p-10 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-32 h-32 bg-black/5 -mr-16 -mt-16 rotate-45" />

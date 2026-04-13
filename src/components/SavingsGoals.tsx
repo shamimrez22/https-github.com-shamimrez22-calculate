@@ -119,7 +119,7 @@ export default function SavingsGoals({ goals }: { goals: SavingsGoal[] }) {
                   </div>
                   <button 
                     onClick={() => handleDeleteGoal(goal.id)}
-                    className="p-3 text-black/20 hover:text-[#8B0000] border-2 border-transparent hover:border-black transition-all"
+                    className="p-3 text-black/20 hover:text-[#2FA084] border-2 border-transparent hover:border-black transition-all"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
@@ -141,7 +141,7 @@ export default function SavingsGoals({ goals }: { goals: SavingsGoal[] }) {
                     <motion.div 
                       initial={{ width: 0 }}
                       animate={{ width: `${progress}%` }}
-                      className={`h-full rounded-none ${isCompleted ? 'bg-emerald-700' : 'bg-[#8B0000]'}`}
+                      className={`h-full rounded-none ${isCompleted ? 'bg-emerald-700' : 'bg-[#2FA084]'}`}
                     />
                   </div>
                 </div>
@@ -189,7 +189,7 @@ export default function SavingsGoals({ goals }: { goals: SavingsGoal[] }) {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-xl bg-[#E8C6B0] rounded-none p-12 space-y-10 border-2 border-black"
+              className="relative w-full max-w-xl bg-[#F0F9F6] rounded-none p-12 space-y-10 border-2 border-black"
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-3xl font-black text-black tracking-tighter uppercase">Initialize Goal</h3>
@@ -220,7 +220,7 @@ export default function SavingsGoals({ goals }: { goals: SavingsGoal[] }) {
                       value={targetAmount}
                       onChange={(e) => setTargetAmount(e.target.value)}
                       placeholder="0.00"
-                      className="w-full px-6 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
+                      className="w-full px-6 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
                     />
                   </div>
                   <div className="space-y-3">
@@ -230,7 +230,7 @@ export default function SavingsGoals({ goals }: { goals: SavingsGoal[] }) {
                       value={currentAmount}
                       onChange={(e) => setCurrentAmount(e.target.value)}
                       placeholder="0.00"
-                      className="w-full px-6 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
+                      className="w-full px-6 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
                     />
                   </div>
                 </div>

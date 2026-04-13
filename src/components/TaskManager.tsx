@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Task } from '../types';
 import { storage } from '../lib/storage';
-import { Plus, Calendar, Clock, CheckCircle2, Circle, Trash2, Edit2, ListTodo, AlertCircle } from 'lucide-react';
+import { Plus, Calendar, Clock, CheckCircle2, Circle, Trash2, Edit2, ListTodo, AlertCircle, Mic } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import TaskForm from './TaskForm';
 import { format, isToday, isFuture, parseISO } from 'date-fns';
 import { cn } from '../lib/utils';
+import VoiceInput from './VoiceInput';
 
 interface TaskManagerProps {
   tasks: Task[];
@@ -13,8 +14,8 @@ interface TaskManagerProps {
 
 function PriorityBadge({ priority }: { priority: Task['priority'] }) {
   const colors = {
-    high: 'bg-rose-50 text-[#8B0000] border-[#8B0000]',
-    medium: 'bg-[#8B0000] text-white border-black',
+    high: 'bg-rose-50 text-[#2FA084] border-[#2FA084]',
+    medium: 'bg-[#2FA084] text-white border-black',
     low: 'bg-white text-black/40 border-black/20',
   };
   return (
@@ -47,7 +48,7 @@ function TaskItem({ task, toggleComplete, handleDelete, setEditingTask, setShowF
         className={cn(
           "w-8 h-8 rounded-none border-2 flex items-center justify-center transition-all",
           task.completed 
-            ? "bg-[#8B0000] border-black text-white" 
+            ? "bg-[#2FA084] border-black text-white" 
             : "border-black text-transparent hover:text-black"
         )}
       >
@@ -65,10 +66,10 @@ function TaskItem({ task, toggleComplete, handleDelete, setEditingTask, setShowF
         </div>
         <div className="flex items-center gap-6 text-[10px] font-black text-black/40 uppercase tracking-widest">
           <span className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-[#8B0000]" /> {format(parseISO(task.scheduledAt), 'MMM dd')}
+            <Calendar className="w-4 h-4 text-[#2FA084]" /> {format(parseISO(task.scheduledAt), 'MMM dd')}
           </span>
           <span className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-[#8B0000]" /> {format(parseISO(task.scheduledAt), 'HH:mm')}
+            <Clock className="w-4 h-4 text-[#2FA084]" /> {format(parseISO(task.scheduledAt), 'HH:mm')}
           </span>
         </div>
         <div className="flex items-center justify-between md:justify-end gap-4">
@@ -82,7 +83,7 @@ function TaskItem({ task, toggleComplete, handleDelete, setEditingTask, setShowF
             </button>
             <button 
               onClick={() => task.id && handleDelete(task.id)}
-              className="p-2 text-black/40 hover:text-[#8B0000] hover:bg-white border-2 border-transparent hover:border-black transition-all"
+              className="p-2 text-black/40 hover:text-[#2FA084] hover:bg-white border-2 border-transparent hover:border-black transition-all"
             >
               <Trash2 className="w-5 h-5" />
             </button>
@@ -178,28 +179,34 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
       {/* Spreadsheet Style Quick Entry */}
       <div className="bg-white border-2 border-black p-1">
         <form onSubmit={handleQuickAdd} className="flex flex-col md:flex-row gap-px bg-black">
-          <input 
-            type="text"
-            placeholder="ENTER TASK TITLE (QUICK AUDIT)..."
-            value={quickTask.title}
-            onChange={(e) => setQuickTask({ ...quickTask, title: e.target.value })}
-            className="flex-1 p-5 bg-[#D1D1D1] outline-none font-black text-[10px] uppercase tracking-widest text-black placeholder-black/30"
-          />
+          <div className="flex-1 relative flex items-center bg-[#E2E8F0]">
+            <input 
+              type="text"
+              placeholder="ENTER TASK TITLE (QUICK AUDIT)..."
+              value={quickTask.title}
+              onChange={(e) => setQuickTask({ ...quickTask, title: e.target.value })}
+              className="flex-1 p-5 bg-transparent outline-none font-black text-[10px] uppercase tracking-widest text-black placeholder-black/30"
+            />
+            <div className="flex gap-1 pr-2">
+              <VoiceInput onResult={(text) => setQuickTask(prev => ({ ...prev, title: prev.title ? `${prev.title} ${text}` : text }))} language="bn-BD" />
+              <VoiceInput onResult={(text) => setQuickTask(prev => ({ ...prev, title: prev.title ? `${prev.title} ${text}` : text }))} language="en-US" />
+            </div>
+          </div>
           <input 
             type="date"
             value={quickTask.date}
             onChange={(e) => setQuickTask({ ...quickTask, date: e.target.value })}
-            className="w-full md:w-48 p-5 bg-[#D1D1D1] outline-none font-black text-[10px] text-black border-l border-black"
+            className="w-full md:w-48 p-5 bg-[#E2E8F0] outline-none font-black text-[10px] text-black border-l border-black"
           />
           <input 
             type="time"
             value={quickTask.time}
             onChange={(e) => setQuickTask({ ...quickTask, time: e.target.value })}
-            className="w-full md:w-40 p-5 bg-[#D1D1D1] outline-none font-black text-[10px] text-black border-l border-black"
+            className="w-full md:w-40 p-5 bg-[#E2E8F0] outline-none font-black text-[10px] text-black border-l border-black"
           />
           <button 
             type="submit"
-            className="bg-[#8B0000] text-white px-10 py-5 font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all border-2 border-transparent hover:border-black"
+            className="bg-[#2FA084] text-white px-10 py-5 font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all border-2 border-transparent hover:border-black"
           >
             Commit Row
           </button>
@@ -210,7 +217,7 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
         <div className="space-y-10">
           <section>
             <h3 className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-6 flex items-center gap-4">
-              <div className="p-2 bg-[#8B0000] text-white border-2 border-black">
+              <div className="p-2 bg-[#2FA084] text-white border-2 border-black">
                 <AlertCircle className="w-4 h-4" />
               </div>
               Priority Focus
@@ -291,7 +298,7 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
             </div>
           </section>
 
-          <div className="relative overflow-hidden bg-[#8B0000] p-12 text-white border-2 border-black">
+          <div className="relative overflow-hidden bg-[#2FA084] p-12 text-white border-2 border-black">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 -mr-16 -mt-16 rotate-45" />
             <ListTodo className="w-12 h-12 mb-8 text-white" />
             <h3 className="text-2xl font-black mb-4 tracking-tighter uppercase">System Integrity</h3>

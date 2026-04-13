@@ -72,7 +72,7 @@ export default function BudgetManager({ budgets, transactions }: BudgetManagerPr
         <div className="lg:col-span-1">
           <div className="glass-card p-10 sticky top-8">
             <h3 className="text-xl font-black text-black mb-10 flex items-center gap-4 uppercase tracking-tighter">
-              <div className="p-2 bg-[#8B0000] text-white border-2 border-black">
+              <div className="p-2 bg-[#2FA084] text-white border-2 border-black">
                 <Plus className="w-6 h-6" />
               </div>
               New Limit
@@ -100,7 +100,7 @@ export default function BudgetManager({ budgets, transactions }: BudgetManagerPr
                     value={limit}
                     onChange={(e) => setLimit(e.target.value)}
                     placeholder="0.00"
-                    className="w-full pl-10 pr-4 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-2xl tracking-tighter"
+                    className="w-full pl-10 pr-4 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-2xl tracking-tighter"
                   />
                 </div>
               </div>
@@ -142,7 +142,7 @@ export default function BudgetManager({ budgets, transactions }: BudgetManagerPr
                   key={budget.id} 
                   className="glass-card p-10 group relative overflow-hidden"
                 >
-                  {isOver && <div className="absolute top-0 left-0 w-2 h-full bg-[#8B0000]" />}
+                  {isOver && <div className="absolute top-0 left-0 w-2 h-full bg-[#2FA084]" />}
                   <div className="flex justify-between items-start mb-8">
                     <div className="space-y-2">
                       <h4 className="text-2xl font-black text-black tracking-tighter uppercase">{budget.category}</h4>
@@ -155,13 +155,13 @@ export default function BudgetManager({ budgets, transactions }: BudgetManagerPr
                     <div className="flex flex-col items-end gap-4">
                       <span className={cn(
                         "px-4 py-1.5 rounded-none text-[10px] font-black tracking-widest uppercase border-2",
-                        percent >= 90 ? "bg-rose-50 text-[#8B0000] border-[#8B0000]" : "bg-white text-black border-black"
+                        percent >= 90 ? "bg-rose-50 text-[#2FA084] border-[#2FA084]" : "bg-white text-black border-black"
                       )}>
                         {Math.round(percent)}% UTILIZED
                       </span>
                       <button 
                         onClick={() => budget.id && handleDelete(budget.id)}
-                        className="p-3 text-black/20 hover:text-[#8B0000] hover:bg-white border-2 border-transparent hover:border-black rounded-none transition-all opacity-0 group-hover:opacity-100"
+                        className="p-3 text-black/20 hover:text-[#2FA084] hover:bg-white border-2 border-transparent hover:border-black rounded-none transition-all opacity-0 group-hover:opacity-100"
                       >
                         <Trash2 className="w-6 h-6" />
                       </button>
@@ -175,12 +175,12 @@ export default function BudgetManager({ budgets, transactions }: BudgetManagerPr
                         animate={{ width: `${percent}%` }}
                         className={cn(
                           "h-full rounded-none transition-all duration-1000",
-                          percent >= 90 ? "bg-[#8B0000]" : "bg-black"
+                          percent >= 90 ? "bg-[#2FA084]" : "bg-black"
                         )}
                       />
                     </div>
                     {isOver && (
-                      <div className="p-4 bg-rose-50 border-2 border-[#8B0000] text-[10px] font-black text-[#8B0000] uppercase tracking-widest flex items-center gap-3">
+                      <div className="p-4 bg-rose-50 border-2 border-[#2FA084] text-[10px] font-black text-[#2FA084] uppercase tracking-widest flex items-center gap-3">
                         <AlertCircle className="w-5 h-5" />
                         Critical: Threshold exceeded by ৳{(spent - budget.limit).toLocaleString()}
                       </div>

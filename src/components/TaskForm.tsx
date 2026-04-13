@@ -3,6 +3,7 @@ import { Task } from '../types';
 import { storage } from '../lib/storage';
 import { X, Calendar, Clock, Loader2, ListTodo } from 'lucide-react';
 import { motion } from 'motion/react';
+import VoiceInput from './VoiceInput';
 
 interface TaskFormProps {
   onClose: () => void;
@@ -88,12 +89,12 @@ export default function TaskForm({ onClose, task }: TaskFormProps) {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-[#E8C6B0] w-full max-w-lg rounded-none overflow-hidden border-2 border-black"
+        className="bg-[#F0F9F6] w-full max-w-lg rounded-none overflow-hidden border-2 border-black"
       >
         <div className="p-8">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-[#8B0000] rounded-none text-white border-2 border-black">
+              <div className="p-3 bg-[#2FA084] rounded-none text-white border-2 border-black">
                 <ListTodo className="w-6 h-6" />
               </div>
               <h2 className="text-2xl font-black text-black tracking-tighter uppercase">{task ? 'Edit Task' : 'New Task'}</h2>
@@ -105,7 +106,13 @@ export default function TaskForm({ onClose, task }: TaskFormProps) {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="excel-label ml-1">Task Title</label>
+              <div className="flex justify-between items-center">
+                <label className="excel-label ml-1">Task Title</label>
+                <div className="flex gap-2">
+                  <VoiceInput onResult={(text) => setTitle(prev => prev ? `${prev} ${text}` : text)} language="bn-BD" />
+                  <VoiceInput onResult={(text) => setTitle(prev => prev ? `${prev} ${text}` : text)} language="en-US" />
+                </div>
+              </div>
               <input 
                 type="text" 
                 required
@@ -119,7 +126,7 @@ export default function TaskForm({ onClose, task }: TaskFormProps) {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="excel-label ml-1 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-[#8B0000]" /> Date
+                  <Calendar className="w-4 h-4 text-[#2FA084]" /> Date
                 </label>
                 <input 
                   type="date" 
@@ -131,7 +138,7 @@ export default function TaskForm({ onClose, task }: TaskFormProps) {
               </div>
               <div className="space-y-2">
                 <label className="excel-label ml-1 flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-[#8B0000]" /> Time
+                  <Clock className="w-4 h-4 text-[#2FA084]" /> Time
                 </label>
                 <input 
                   type="time" 
@@ -171,7 +178,13 @@ export default function TaskForm({ onClose, task }: TaskFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="excel-label ml-1">Notes (Optional)</label>
+              <div className="flex justify-between items-center">
+                <label className="excel-label ml-1">Notes (Optional)</label>
+                <div className="flex gap-2">
+                  <VoiceInput onResult={(text) => setNotes(prev => prev ? `${prev} ${text}` : text)} language="bn-BD" />
+                  <VoiceInput onResult={(text) => setNotes(prev => prev ? `${prev} ${text}` : text)} language="en-US" />
+                </div>
+              </div>
               <textarea 
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}

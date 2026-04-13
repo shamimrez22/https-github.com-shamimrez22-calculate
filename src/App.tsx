@@ -50,22 +50,7 @@ export default function App() {
           console.log('SW Registered:', registration);
           
           // Request permission
-          const permission = await Notification.requestPermission();
-          if (permission === 'granted') {
-            const res = await fetch('/api/vapid-public-key');
-            const { publicKey } = await res.json();
-            
-            const subscription = await registration.pushManager.subscribe({
-              userVisibleOnly: true,
-              applicationServerKey: publicKey
-            });
-            
-            await fetch('/api/subscribe', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(subscription)
-            });
-          }
+          await Notification.requestPermission();
         } catch (err) {
           console.error('SW Registration failed:', err);
         }
@@ -117,13 +102,6 @@ export default function App() {
       setSubscriptions(data.subscriptions || []);
       setAssets(data.assets || []);
       setSettings(data.settings);
-      
-      // Sync tasks to server for background notifications
-      fetch('/api/sync-tasks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ uid: profile.uid, tasks: data.tasks })
-      }).catch(console.error);
     };
 
     loadData();
@@ -212,8 +190,8 @@ export default function App() {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-6">
           <div className="relative">
-            <div className="w-16 h-16 border-4 border-indigo-500/10 rounded-none animate-pulse" />
-            <Loader2 className="w-16 h-16 text-indigo-600 animate-spin absolute top-0 left-0" />
+            <div className="w-16 h-16 border-4 border-[#2FA084]/10 rounded-none animate-pulse" />
+            <Loader2 className="w-16 h-16 text-[#2FA084] animate-spin absolute top-0 left-0" />
           </div>
           <div className="text-center">
             <p className="text-slate-900 text-xl font-bold tracking-tight">FinTrack AI</p>
@@ -233,7 +211,7 @@ export default function App() {
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
-        return <Dashboard transactions={transactions} budgets={budgets} goals={goals} onAddTransaction={() => setShowAddModal(true)} profile={profile} onNavigate={setActiveTab} />;
+        return <Dashboard transactions={transactions} budgets={budgets} goals={goals} tasks={tasks} onAddTransaction={() => setShowAddModal(true)} profile={profile} onNavigate={setActiveTab} />;
       case 'transactions':
         return <TransactionList transactions={transactions} />;
       case 'budgets':
@@ -257,7 +235,7 @@ export default function App() {
       case 'admin':
         return <AdminPanel />;
       default:
-        return <Dashboard transactions={transactions} budgets={budgets} goals={goals} onAddTransaction={() => setShowAddModal(true)} profile={profile} onNavigate={setActiveTab} />;
+        return <Dashboard transactions={transactions} budgets={budgets} goals={goals} tasks={tasks} onAddTransaction={() => setShowAddModal(true)} profile={profile} onNavigate={setActiveTab} />;
     }
   };
 
@@ -296,10 +274,10 @@ export default function App() {
 
 function Toast({ title, message, type, onClose }: { title: string; message: string; type: string; onClose: () => void }) {
   const icons: Record<string, any> = {
-    task_reminder: <Clock className="w-5 h-5 text-indigo-400" />,
+    task_reminder: <Clock className="w-5 h-5 text-[#2FA084]" />,
     reminder: <ListTodo className="w-5 h-5 text-amber-400" />,
     budget_warning: <AlertCircle className="w-5 h-5 text-rose-400" />,
-    default: <Bell className="w-5 h-5 text-indigo-400" />
+    default: <Bell className="w-5 h-5 text-[#2FA084]" />
   };
 
   return (
@@ -307,16 +285,16 @@ function Toast({ title, message, type, onClose }: { title: string; message: stri
       initial={{ opacity: 0, y: 50, x: '-50%' }}
       animate={{ opacity: 1, y: 0, x: '-50%' }}
       exit={{ opacity: 0, y: 50, x: '-50%' }}
-      className="fixed bottom-24 md:bottom-10 left-1/2 z-[200] w-[90%] max-w-sm bg-white p-5 flex items-start gap-5 shadow-2xl rounded-none border border-slate-200"
+      className="fixed bottom-24 md:bottom-10 left-1/2 z-[200] w-[90%] max-w-sm bg-white p-5 flex items-start gap-5 rounded-none border-2 border-black"
     >
-      <div className="p-3 bg-indigo-50 rounded-none border border-indigo-100">
+      <div className="p-3 bg-[#E2E8F0] rounded-none border-2 border-black">
         {icons[type] || icons.default}
       </div>
       <div className="flex-1 min-w-0">
-        <h4 className="font-bold text-slate-900 text-sm tracking-tight">{title}</h4>
-        <p className="text-slate-500 text-xs font-medium mt-1 leading-relaxed">{message}</p>
+        <h4 className="font-black text-black text-sm tracking-tighter uppercase">{title}</h4>
+        <p className="text-black/60 text-[10px] font-black uppercase tracking-widest mt-1 leading-relaxed">{message}</p>
       </div>
-      <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-900 transition-colors">
+      <button onClick={onClose} className="p-2 text-black/20 hover:text-black transition-colors">
         <X className="w-4 h-4" />
       </button>
     </motion.div>

@@ -51,7 +51,7 @@ export default function Reports({ transactions, budgets, goals }: { transactions
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div className="bg-[#D1D1D1] p-10 border-2 border-emerald-700 relative overflow-hidden">
+        <div className="bg-[#E2E8F0] p-10 border-2 border-emerald-700 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-700/5 -mr-12 -mt-12 rotate-45" />
           <p className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-4">Gross Revenue</p>
           <h4 className="text-4xl font-black text-black tracking-tighter">৳{totalIncome.toLocaleString()}</h4>
@@ -59,15 +59,15 @@ export default function Reports({ transactions, budgets, goals }: { transactions
             <TrendingUp className="w-4 h-4" /> Cumulative
           </div>
         </div>
-        <div className="bg-[#D1D1D1] p-10 border-2 border-[#8B0000] relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-[#8B0000]/5 -mr-12 -mt-12 rotate-45" />
+        <div className="bg-[#E2E8F0] p-10 border-2 border-[#2FA084] relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-[#2FA084]/5 -mr-12 -mt-12 rotate-45" />
           <p className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-4">Total Expenditure</p>
           <h4 className="text-4xl font-black text-black tracking-tighter">৳{totalExpense.toLocaleString()}</h4>
-          <div className="mt-6 flex items-center gap-3 text-[#8B0000] text-[10px] font-black uppercase tracking-widest">
+          <div className="mt-6 flex items-center gap-3 text-[#2FA084] text-[10px] font-black uppercase tracking-widest">
             <TrendingDown className="w-4 h-4" /> Cumulative
           </div>
         </div>
-        <div className="bg-[#D1D1D1] p-10 border-2 border-black relative overflow-hidden">
+        <div className="bg-[#E2E8F0] p-10 border-2 border-black relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-black/5 -mr-12 -mt-12 rotate-45" />
           <p className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-4">Net Capital Yield</p>
           <h4 className="text-4xl font-black text-black tracking-tighter">৳{netSavings.toLocaleString()}</h4>
@@ -79,7 +79,7 @@ export default function Reports({ transactions, budgets, goals }: { transactions
 
       <section className="glass-card p-10 space-y-10">
         <div className="flex items-center gap-4">
-          <div className="p-4 bg-[#8B0000] text-white border-2 border-black">
+          <div className="p-4 bg-[#2FA084] text-white border-2 border-black">
             <Table className="w-8 h-8" />
           </div>
           <h3 className="text-2xl font-black text-black tracking-tighter uppercase">Categorical Distribution</h3>
@@ -113,7 +113,7 @@ export default function Reports({ transactions, budgets, goals }: { transactions
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <section className="glass-card p-10 space-y-8">
           <h3 className="text-xl font-black text-black tracking-tighter uppercase flex items-center gap-4">
-            <FileText className="w-6 h-6 text-[#8B0000]" /> Budget Compliance
+            <FileText className="w-6 h-6 text-[#2FA084]" /> Budget Compliance
           </h3>
           <div className="space-y-6">
             {budgets.map(b => {
@@ -124,7 +124,7 @@ export default function Reports({ transactions, budgets, goals }: { transactions
                   <span className="text-xs font-black text-black/40 uppercase tracking-widest">{b.category}</span>
                   <span className={cn(
                     "text-[10px] font-black uppercase tracking-widest px-3 py-1.5 border-2 rounded-none",
-                    status === 'Over' ? "bg-red-50 text-[#8B0000] border-[#8B0000]" : "bg-emerald-50 text-emerald-700 border-emerald-700"
+                    status === 'Over' ? "bg-red-50 text-[#2FA084] border-[#2FA084]" : "bg-emerald-50 text-emerald-700 border-emerald-700"
                   )}>
                     {status} Threshold
                   </span>
@@ -136,7 +136,7 @@ export default function Reports({ transactions, budgets, goals }: { transactions
 
         <section className="glass-card p-10 space-y-8">
           <h3 className="text-xl font-black text-black tracking-tighter uppercase flex items-center gap-4">
-            <ArrowRight className="w-6 h-6 text-[#8B0000]" /> Objective Projections
+            <ArrowRight className="w-6 h-6 text-[#2FA084]" /> Objective Projections
           </h3>
           <div className="space-y-6">
             {goals.map(g => {

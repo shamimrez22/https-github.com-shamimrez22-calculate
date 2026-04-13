@@ -42,7 +42,7 @@ export default function NotificationHistory({ notifications }: NotificationHisto
           <h2 className="text-3xl font-black text-black tracking-tighter uppercase">Alert Archive</h2>
           <p className="text-black/40 text-[10px] font-black uppercase tracking-widest mt-1">System notification logs</p>
         </div>
-        <div className="px-6 py-2 bg-[#8B0000] text-white border-2 border-black text-[10px] font-black uppercase tracking-widest">
+        <div className="px-6 py-2 bg-[#2FA084] text-white border-2 border-black text-[10px] font-black uppercase tracking-widest">
           {notifications.length} RECORDS
         </div>
       </div>
@@ -75,7 +75,7 @@ export default function NotificationHistory({ notifications }: NotificationHisto
                 >
                   <div className={cn(
                     "p-5 border-2 h-fit",
-                    !notif.read ? "bg-[#8B0000] text-white border-black" : "bg-white/30 text-black/40 border-black/20"
+                    !notif.read ? "bg-[#2FA084] text-white border-black" : "bg-white/30 text-black/40 border-black/20"
                   )}>
                     <config.icon className="w-8 h-8" />
                   </div>
@@ -99,7 +99,7 @@ export default function NotificationHistory({ notifications }: NotificationHisto
                       )}
                       <button 
                         onClick={() => notif.id && handleDelete(notif.id)}
-                        className="text-[10px] font-black text-[#8B0000] uppercase tracking-widest flex items-center gap-2 hover:bg-[#8B0000] hover:text-white px-4 py-2 border-2 border-[#8B0000] transition-all opacity-0 group-hover:opacity-100"
+                        className="text-[10px] font-black text-[#2FA084] uppercase tracking-widest flex items-center gap-2 hover:bg-[#2FA084] hover:text-white px-4 py-2 border-2 border-[#2FA084] transition-all opacity-0 group-hover:opacity-100"
                       >
                         <Trash2 className="w-4 h-4" /> Purge
                       </button>

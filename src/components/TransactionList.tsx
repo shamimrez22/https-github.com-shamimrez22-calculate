@@ -93,7 +93,7 @@ export default function TransactionList({ transactions }: TransactionListProps) 
       </div>
 
       <div className="glass-card overflow-hidden">
-        <div className="p-8 border-b-2 border-[#8B0000] bg-white/30 space-y-8">
+        <div className="p-8 border-b-2 border-[#2FA084] bg-white/30 space-y-8">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-black/30 w-5 h-5" />
@@ -113,7 +113,7 @@ export default function TransactionList({ transactions }: TransactionListProps) 
                   className={cn(
                     "px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-widest transition-all",
                     filterType === type 
-                      ? 'bg-[#8B0000] text-white' 
+                      ? 'bg-[#2FA084] text-white' 
                       : 'text-black/40 hover:text-black'
                   )}
                 >
@@ -127,7 +127,7 @@ export default function TransactionList({ transactions }: TransactionListProps) 
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="text-left text-white text-[10px] font-black uppercase tracking-widest border-b-2 border-black bg-[#8B0000]">
+              <tr className="text-left text-white text-[10px] font-black uppercase tracking-widest border-b-2 border-black bg-[#2FA084]">
                 <th className="px-10 py-4">Timestamp</th>
                 <th className="px-10 py-4">Sector</th>
                 <th className="px-10 py-4">Description</th>
@@ -142,7 +142,7 @@ export default function TransactionList({ transactions }: TransactionListProps) 
                     <div className="flex items-center gap-6">
                       <div className={cn(
                         "w-10 h-10 rounded-none flex items-center justify-center border-2 border-black",
-                        t.type === 'income' ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-[#8B0000]"
+                        t.type === 'income' ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-[#2FA084]"
                       )}>
                         {t.type === 'income' ? <ArrowDownLeft className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
                       </div>
@@ -169,7 +169,7 @@ export default function TransactionList({ transactions }: TransactionListProps) 
                   <td className="px-10 py-6 text-center">
                     <button 
                       onClick={() => t.id && setDeleteId(t.id)}
-                      className="p-3 text-black/30 hover:text-[#8B0000] hover:bg-white border-2 border-transparent hover:border-black rounded-none transition-all"
+                      className="p-3 text-black/30 hover:text-[#2FA084] hover:bg-white border-2 border-transparent hover:border-black rounded-none transition-all"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>

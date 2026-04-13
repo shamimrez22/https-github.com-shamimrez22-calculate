@@ -8,8 +8,14 @@ class NotificationService {
     reminder: 'https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3', // Subtle tone
     ai_insight: 'https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3', // Subtle tone
     goal_progress: 'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3', // Success tone
-    task_reminder: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', // Alarm-like tone
+    task_reminder: 'https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3', // Loud alarm tone
   };
+
+  async requestPermission(): Promise<boolean> {
+    if (!("Notification" in window)) return false;
+    const permission = await Notification.requestPermission();
+    return permission === "granted";
+  }
 
   async sendNotification(
     type: AppNotification['type'],
@@ -51,16 +57,8 @@ class NotificationService {
       }));
 
       // System Notification
-      if ("Notification" in window) {
-        if (Notification.permission === "granted") {
-          new Notification(title, { body: message, icon: '/favicon.ico' });
-        } else if (Notification.permission !== "denied") {
-          Notification.requestPermission().then(permission => {
-            if (permission === "granted") {
-              new Notification(title, { body: message, icon: '/favicon.ico' });
-            }
-          });
-        }
+      if ("Notification" in window && Notification.permission === "granted") {
+        this.showSystemNotification(title, message);
       }
 
       if (settings.soundEnabled) {
@@ -72,6 +70,28 @@ class NotificationService {
       }
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  private async showSystemNotification(title: string, message: string) {
+    try {
+      if ('serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.getRegistration();
+        if (registration) {
+          registration.showNotification(title, {
+            body: message,
+            icon: '/favicon.ico',
+            badge: '/favicon.ico',
+            vibrate: [100, 50, 100],
+            tag: 'fiscal-alert',
+            renotify: true
+          } as any);
+          return;
+        }
+      }
+      new Notification(title, { body: message, icon: '/favicon.ico' } as any);
+    } catch (e) {
+      console.error('System notification failed:', e);
     }
   }
 

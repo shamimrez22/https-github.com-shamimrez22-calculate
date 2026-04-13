@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { UserSettings, UserProfile } from '../types';
 import { storage } from '../lib/storage';
-import { Bell, Volume2, Smartphone, Moon, Save, Loader2, User, Lock, Trash2, LogOut, Eye, EyeOff } from 'lucide-react';
+import { Bell, Volume2, Smartphone, Moon, Save, Loader2, User, Lock, Trash2, LogOut, Eye, EyeOff, Zap, Play } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import ConfirmationModal from './ConfirmationModal';
+import { notificationService } from '../services/notificationService';
+import VoiceInput from './VoiceInput';
 
 export default function Settings() {
   const [settings, setSettings] = useState<UserSettings | null>(null);
@@ -126,7 +128,7 @@ export default function Settings() {
               exit={{ opacity: 0, x: 20 }}
               className={cn(
                 "text-[10px] font-black uppercase tracking-widest px-6 py-3 border-2 rounded-none",
-                message.type === 'error' ? "bg-red-50 text-[#8B0000] border-[#8B0000]" : "bg-emerald-50 text-emerald-700 border-emerald-700"
+                message.type === 'error' ? "bg-red-50 text-[#2FA084] border-[#2FA084]" : "bg-emerald-50 text-emerald-700 border-emerald-700"
               )}
             >
               {message.text}
@@ -138,16 +140,22 @@ export default function Settings() {
       {/* Account Settings */}
       <section className="space-y-6">
         <h3 className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-3">
-          <User className="w-5 h-5 text-[#8B0000]" /> Security Credentials
+          <User className="w-5 h-5 text-[#2FA084]" /> Security Credentials
         </h3>
         <div className="glass-card overflow-hidden">
           <div className="p-10 space-y-10">
             {/* Username */}
             <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Identity Handle</label>
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Identity Handle</label>
+                <div className="flex gap-2">
+                  <VoiceInput onResult={(text) => setNewUsername(text)} language="bn-BD" />
+                  <VoiceInput onResult={(text) => setNewUsername(text)} language="en-US" />
+                </div>
+              </div>
               <div className="flex gap-4">
                 <div className="relative flex-1">
-                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-black w-6 h-6" />
+                  <User className="absolute left-6 top-1/2 -translate-y-1/2 text-black w-6 h-6" />
                   <input 
                     type="text" 
                     value={newUsername}
@@ -161,7 +169,7 @@ export default function Settings() {
                   disabled={accountActionLoading || newUsername === profile?.username}
                   className="neo-button neo-button-primary px-10 py-5"
                 >
-                  Commit
+                  Commit Change
                 </button>
               </div>
             </div>
@@ -171,7 +179,7 @@ export default function Settings() {
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Access Key</label>
               <div className="flex gap-4">
                 <div className="relative flex-1">
-                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-black w-6 h-6" />
+                  <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-black w-6 h-6" />
                   <input 
                     type={showPassword ? "text" : "password"} 
                     value={newPassword}
@@ -181,7 +189,7 @@ export default function Settings() {
                   />
                   <button 
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-5 top-1/2 -translate-y-1/2 text-black/40 hover:text-black transition-all"
+                    className="absolute right-6 top-1/2 -translate-y-1/2 text-black/40 hover:text-black transition-all"
                   >
                     {showPassword ? <EyeOff className="w-6 h-6" /> : <Eye className="w-6 h-6" />}
                   </button>
@@ -202,14 +210,14 @@ export default function Settings() {
       {/* Notification Preferences */}
       <section className="space-y-6">
         <h3 className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-3">
-          <Bell className="w-5 h-5 text-[#8B0000]" /> Alert Protocols
+          <Bell className="w-5 h-5 text-[#2FA084]" /> Alert Protocols
         </h3>
         <div className="glass-card overflow-hidden">
           <div className="p-10 space-y-10">
             {/* Main Toggle */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">
-                <div className="p-4 bg-[#8B0000] text-white border-2 border-black">
+                <div className="p-4 bg-[#2FA084] text-white border-2 border-black">
                   <Bell className="w-8 h-8" />
                 </div>
                 <div>
@@ -221,7 +229,7 @@ export default function Settings() {
                 onClick={() => setSettings({ ...settings, notificationsEnabled: !settings.notificationsEnabled })}
                 className={cn(
                   "w-16 h-8 border-2 border-black transition-all relative",
-                  settings.notificationsEnabled ? "bg-[#8B0000]" : "bg-white/30"
+                  settings.notificationsEnabled ? "bg-[#2FA084]" : "bg-white/30"
                 )}
               >
                 <div className={cn(
@@ -250,7 +258,7 @@ export default function Settings() {
                   onClick={() => setSettings({ ...settings, soundEnabled: !settings.soundEnabled })}
                   className={cn(
                     "w-16 h-8 border-2 border-black transition-all relative",
-                    settings.soundEnabled ? "bg-[#8B0000]" : "bg-white/30"
+                    settings.soundEnabled ? "bg-[#2FA084]" : "bg-white/30"
                   )}
                 >
                   <div className={cn(
@@ -275,13 +283,58 @@ export default function Settings() {
                   onClick={() => setSettings({ ...settings, vibrationEnabled: !settings.vibrationEnabled })}
                   className={cn(
                     "w-16 h-8 border-2 border-black transition-all relative",
-                    settings.vibrationEnabled ? "bg-[#8B0000]" : "bg-white/30"
+                    settings.vibrationEnabled ? "bg-[#2FA084]" : "bg-white/30"
                   )}
                 >
                   <div className={cn(
                     "absolute top-1 w-4 h-4 border-2 border-black transition-all",
                     settings.vibrationEnabled ? "right-1 bg-white" : "left-1 bg-black/20"
                   )} />
+                </button>
+              </div>
+
+              {/* Test Notification */}
+              <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button 
+                  onClick={() => {
+                    if (settings) {
+                      notificationService.sendNotification(
+                        'reminder',
+                        'SYSTEM TEST',
+                        'Operational signal verified. Background link active.',
+                        settings
+                      );
+                    }
+                  }}
+                  className="w-full py-4 border-2 border-black text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3"
+                >
+                  <Zap className="w-5 h-5" />
+                  Verify System Signal
+                </button>
+                <button 
+                  onClick={async () => {
+                    const granted = await notificationService.requestPermission();
+                    if (granted) {
+                      showMessage('Notification permission granted');
+                      notificationService.sendNotification('reminder', 'System Online', 'Notifications are now active.', settings!);
+                    } else {
+                      showMessage('Notification permission denied', 'error');
+                    }
+                  }}
+                  className="w-full py-4 bg-[#2FA084] text-white border-2 border-black text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all flex items-center justify-center gap-3"
+                >
+                  <Bell className="w-5 h-5" />
+                  Enable Notifications
+                </button>
+                <button 
+                  onClick={() => {
+                    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3');
+                    audio.play();
+                  }}
+                  className="w-full py-4 border-2 border-black text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3"
+                >
+                  <Play className="w-5 h-5" />
+                  Test Alarm Sound
                 </button>
               </div>
 
@@ -301,7 +354,7 @@ export default function Settings() {
                     onClick={() => setSettings({ ...settings, quietHours: { ...settings.quietHours, enabled: !settings.quietHours.enabled } })}
                     className={cn(
                       "w-16 h-8 border-2 border-black transition-all relative",
-                      settings.quietHours.enabled ? "bg-[#8B0000]" : "bg-white/30"
+                      settings.quietHours.enabled ? "bg-[#2FA084]" : "bg-white/30"
                     )}
                   >
                     <div className={cn(
@@ -356,18 +409,18 @@ export default function Settings() {
 
       {/* Danger Zone */}
       <section className="space-y-6">
-        <h3 className="text-[10px] font-black text-[#8B0000] uppercase tracking-widest flex items-center gap-3">
+        <h3 className="text-[10px] font-black text-[#2FA084] uppercase tracking-widest flex items-center gap-3">
           <Trash2 className="w-5 h-5" /> Irreversible Actions
         </h3>
-        <div className="bg-red-50 border-2 border-[#8B0000] p-10 flex flex-col sm:flex-row items-center justify-between gap-10">
+        <div className="bg-red-50 border-2 border-[#2FA084] p-10 flex flex-col sm:flex-row items-center justify-between gap-10">
           <div>
-            <h4 className="text-xl font-black text-[#8B0000] uppercase tracking-tighter">Terminate Account</h4>
+            <h4 className="text-xl font-black text-[#2FA084] uppercase tracking-tighter">Terminate Account</h4>
             <p className="text-[10px] text-black/40 font-black uppercase tracking-widest mt-2">Permanent removal of all fiscal datasets</p>
           </div>
           <button 
             onClick={() => setShowDeleteModal(true)}
             disabled={accountActionLoading}
-            className="neo-button bg-[#8B0000] text-white border-black px-10 py-5 flex items-center gap-4"
+            className="neo-button bg-[#2FA084] text-white border-black px-10 py-5 flex items-center gap-4"
           >
             <Trash2 className="w-6 h-6" />
             Terminate
@@ -378,7 +431,7 @@ export default function Settings() {
           onClick={() => storage.setCurrentUser(null)}
           className="neo-button w-full py-6 flex items-center justify-center gap-4"
         >
-          <LogOut className="w-6 h-6 text-[#8B0000]" />
+          <LogOut className="w-6 h-6 text-[#2FA084]" />
           Global De-authentication
         </button>
       </section>

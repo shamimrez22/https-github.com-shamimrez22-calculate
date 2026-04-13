@@ -92,10 +92,10 @@ export default function SubscriptionTracker({ subscriptions }: { subscriptions: 
       </div>
 
       {/* Summary Card */}
-      <div className="bg-[#D1D1D1] p-10 border-2 border-black flex flex-col md:flex-row justify-between items-center gap-10 relative overflow-hidden">
+      <div className="bg-[#E2E8F0] p-10 border-2 border-black flex flex-col md:flex-row justify-between items-center gap-10 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-32 h-32 bg-black/5 -ml-16 -mt-16 rotate-45" />
         <div className="flex items-center gap-8 relative z-10">
-          <div className="p-5 bg-[#8B0000] text-white border-2 border-black">
+          <div className="p-5 bg-[#2FA084] text-white border-2 border-black">
             <RefreshCw className="w-10 h-10" />
           </div>
           <div>
@@ -153,7 +153,7 @@ export default function SubscriptionTracker({ subscriptions }: { subscriptions: 
                   </button>
                   <button 
                     onClick={() => handleDeleteSubscription(sub.id)}
-                    className="p-3 text-black/40 hover:text-[#8B0000] hover:bg-red-50 border-2 border-transparent hover:border-black rounded-none transition-all"
+                    className="p-3 text-black/40 hover:text-[#2FA084] hover:bg-red-50 border-2 border-transparent hover:border-black rounded-none transition-all"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
@@ -166,7 +166,7 @@ export default function SubscriptionTracker({ subscriptions }: { subscriptions: 
                   <p className="text-[10px] text-black/40 font-black uppercase tracking-widest mt-1">per {sub.frequency === 'monthly' ? 'month' : 'year'}</p>
                 </div>
                 {!sub.active && (
-                  <span className="text-[10px] font-black text-[#8B0000] uppercase tracking-widest bg-red-50 px-3 py-1.5 border-2 border-[#8B0000] rounded-none">Paused</span>
+                  <span className="text-[10px] font-black text-[#2FA084] uppercase tracking-widest bg-red-50 px-3 py-1.5 border-2 border-[#2FA084] rounded-none">Paused</span>
                 )}
               </div>
 
@@ -197,7 +197,7 @@ export default function SubscriptionTracker({ subscriptions }: { subscriptions: 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-xl bg-[#E8C6B0] rounded-none p-12 space-y-10 border-2 border-black"
+              className="relative w-full max-w-xl bg-[#F0F9F6] rounded-none p-12 space-y-10 border-2 border-black"
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-3xl font-black text-black tracking-tighter uppercase">Add Recurring</h3>
@@ -228,7 +228,7 @@ export default function SubscriptionTracker({ subscriptions }: { subscriptions: 
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="0.00"
-                      className="w-full px-6 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
+                      className="w-full px-6 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
                     />
                   </div>
                   <div className="space-y-3">

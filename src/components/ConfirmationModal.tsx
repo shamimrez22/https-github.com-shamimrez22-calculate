@@ -39,11 +39,11 @@ export default function ConfirmationModal({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md bg-[#E8C6B0] rounded-none border-2 border-black overflow-hidden"
+            className="relative w-full max-w-md bg-[#F0F9F6] rounded-none border-2 border-black overflow-hidden"
           >
             <div className={cn(
               "p-6 border-b-2 border-black flex justify-between items-center",
-              variant === 'danger' ? "bg-[#8B0000] text-white" : "bg-[#D1D1D1] text-black"
+              variant === 'danger' ? "bg-[#2FA084] text-white" : "bg-[#E2E8F0] text-black"
             )}>
               <div className="flex items-center gap-3">
                 {variant === 'danger' ? <AlertCircle className="w-6 h-6" /> : <CheckCircle2 className="w-6 h-6" />}
@@ -73,7 +73,7 @@ export default function ConfirmationModal({
                   }}
                   className={cn(
                     "neo-button py-4",
-                    variant === 'danger' ? "bg-[#8B0000] text-white" : "bg-emerald-700 text-white"
+                    variant === 'danger' ? "bg-[#2FA084] text-white" : "bg-emerald-700 text-white"
                   )}
                 >
                   {confirmLabel}

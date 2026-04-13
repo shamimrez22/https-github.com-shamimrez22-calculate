@@ -82,27 +82,27 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
 
       {/* Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <div className="bg-[#D1D1D1] p-10 border-2 border-black relative overflow-hidden">
+        <div className="bg-[#E2E8F0] p-10 border-2 border-black relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-black/5 -mr-12 -mt-12 rotate-45" />
           <p className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-4">Total Portfolio Value</p>
           <h4 className="text-5xl font-black text-black tracking-tighter">৳{totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h4>
         </div>
         <div className={cn(
-          "bg-[#D1D1D1] p-10 border-2 relative overflow-hidden",
-          totalProfit >= 0 ? "border-emerald-700" : "border-[#8B0000]"
+          "bg-[#E2E8F0] p-10 border-2 relative overflow-hidden",
+          totalProfit >= 0 ? "border-emerald-700" : "border-[#2FA084]"
         )}>
           <div className="absolute top-0 right-0 w-24 h-24 bg-current opacity-5 -mr-12 -mt-12 rotate-45" />
           <p className="text-[10px] font-black text-black/40 uppercase tracking-widest mb-4">Strategic Yield (P/L)</p>
           <div className="flex items-baseline gap-4">
             <h4 className={cn(
               "text-5xl font-black tracking-tighter",
-              totalProfit >= 0 ? "text-emerald-700" : "text-[#8B0000]"
+              totalProfit >= 0 ? "text-emerald-700" : "text-[#2FA084]"
             )}>
               {totalProfit >= 0 ? '+' : ''}৳{totalProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </h4>
             <span className={cn(
               "text-xl font-black",
-              totalProfit >= 0 ? "text-emerald-700" : "text-[#8B0000]"
+              totalProfit >= 0 ? "text-emerald-700" : "text-[#2FA084]"
             )}>
               ({profitPercent.toFixed(2)}%)
             </span>
@@ -114,7 +114,7 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#8B0000] text-white border-b-2 border-black">
+              <tr className="bg-[#2FA084] text-white border-b-2 border-black">
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Asset Identification</th>
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Classification</th>
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-right">Holdings</th>
@@ -158,13 +158,13 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
                       <td className="px-8 py-6 text-right">
                         <p className={cn(
                           "text-lg font-black tracking-tighter",
-                          assetProfit >= 0 ? "text-emerald-700" : "text-[#8B0000]"
+                          assetProfit >= 0 ? "text-emerald-700" : "text-[#2FA084]"
                         )}>
                           {assetProfit >= 0 ? '+' : ''}৳{assetProfit.toLocaleString()}
                         </p>
                         <p className={cn(
                           "text-[10px] font-black uppercase tracking-widest",
-                          assetProfit >= 0 ? "text-emerald-700" : "text-[#8B0000]"
+                          assetProfit >= 0 ? "text-emerald-700" : "text-[#2FA084]"
                         )}>
                           {assetProfitPercent.toFixed(1)}%
                         </p>
@@ -172,7 +172,7 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
                       <td className="px-8 py-6 text-right">
                         <button 
                           onClick={() => handleDeleteAsset(asset.id)}
-                          className="p-3 text-black/20 hover:text-[#8B0000] hover:bg-red-50 border-2 border-transparent hover:border-black rounded-none transition-all"
+                          className="p-3 text-black/20 hover:text-[#2FA084] hover:bg-red-50 border-2 border-transparent hover:border-black rounded-none transition-all"
                         >
                           <Trash2 className="w-6 h-6" />
                         </button>
@@ -201,7 +201,7 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-xl bg-[#E8C6B0] rounded-none p-12 space-y-10 border-2 border-black"
+              className="relative w-full max-w-xl bg-[#F0F9F6] rounded-none p-12 space-y-10 border-2 border-black"
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-3xl font-black text-black tracking-tighter uppercase">Add Asset</h3>
@@ -249,7 +249,7 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
                       value={quantity}
                       onChange={(e) => setQuantity(e.target.value)}
                       placeholder="0.00"
-                      className="w-full px-6 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
+                      className="w-full px-6 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
                     />
                   </div>
                   <div className="space-y-3">
@@ -261,7 +261,7 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
                       value={purchasePrice}
                       onChange={(e) => setPurchasePrice(e.target.value)}
                       placeholder="0.00"
-                      className="w-full px-6 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
+                      className="w-full px-6 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-xl tracking-tighter"
                     />
                   </div>
                 </div>
@@ -275,7 +275,7 @@ export default function Portfolio({ assets }: { assets: Asset[] }) {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="0.00"
-                    className="w-full px-6 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-2xl tracking-tighter"
+                    className="w-full px-6 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 outline-none focus:bg-white transition-all font-black text-2xl tracking-tighter"
                   />
                 </div>
 

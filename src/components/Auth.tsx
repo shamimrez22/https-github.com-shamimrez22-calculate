@@ -35,12 +35,12 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-[#E8C6B0] flex items-center justify-center p-6 relative overflow-hidden grid-bg font-sans">
+    <div className="min-h-screen bg-[#F0F9F6] flex items-center justify-center p-6 relative overflow-hidden font-sans">
       <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-0 items-stretch relative z-10 border-2 border-black">
         {/* Left: Branding */}
-        <div className="hidden lg:flex flex-col justify-between p-16 bg-[#8B0000] text-white relative overflow-hidden border-r-2 border-black">
+        <div className="flex flex-col justify-between p-16 bg-[#2FA084] text-white relative overflow-hidden border-r-2 border-black">
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-            <div className="absolute top-0 left-0 w-full h-full grid-bg opacity-20" />
+            <div className="absolute top-0 left-0 w-full h-full opacity-20" />
           </div>
           
           <motion.div
@@ -51,7 +51,7 @@ export default function Auth() {
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-white border-2 border-black rounded-none flex items-center justify-center">
-                <PieChart className="text-[#8B0000] w-6 h-6" />
+                <PieChart className="text-[#2FA084] w-6 h-6" />
               </div>
               <span className="text-2xl font-black tracking-tighter uppercase">FinTrack<span className="text-white">.</span></span>
             </div>
@@ -59,7 +59,7 @@ export default function Auth() {
             <div className="space-y-6">
               <h1 className="text-6xl font-black leading-[0.9] tracking-tighter uppercase">
                 Institutional <br />
-                <span className="text-[#E8C6B0]">Grade</span> <br />
+                <span className="text-[#F0F9F6]">Grade</span> <br />
                 Intelligence.
               </h1>
               <p className="text-white/60 text-lg font-bold uppercase tracking-widest leading-relaxed max-w-xs">
@@ -84,10 +84,10 @@ export default function Auth() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="bg-[#E8C6B0] p-12 lg:p-20 space-y-12 relative"
+          className="bg-[#F0F9F6] p-12 lg:p-20 space-y-12 relative"
         >
           <div className="space-y-4">
-            <div className="inline-block px-3 py-1 bg-[#8B0000] text-white text-[10px] font-black uppercase tracking-widest border-2 border-black">
+            <div className="inline-block px-3 py-1 bg-[#2FA084] text-white text-[10px] font-black uppercase tracking-widest border-2 border-black">
               {isLogin ? 'Authentication Required' : 'System Registration'}
             </div>
             <h2 className="text-4xl font-black text-black tracking-tighter uppercase">
@@ -101,7 +101,7 @@ export default function Auth() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="p-5 bg-rose-50 border-2 border-[#8B0000] rounded-none text-[#8B0000] text-[10px] font-black uppercase tracking-widest flex items-center gap-4"
+                className="p-5 bg-rose-50 border-2 border-[#2FA084] rounded-none text-[#2FA084] text-[10px] font-black uppercase tracking-widest flex items-center gap-4"
               >
                 <ShieldCheck className="w-6 h-6" /> {error}
               </motion.div>
@@ -113,13 +113,13 @@ export default function Auth() {
               <div className="space-y-3">
                 <label className="excel-label ml-1">Identity Identifier</label>
                 <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
+                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
                   <input 
                     type="text" 
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm uppercase tracking-widest"
+                    className="w-full pl-14 pr-4 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm uppercase tracking-widest"
                     placeholder="USERNAME"
                   />
                 </div>
@@ -129,13 +129,13 @@ export default function Auth() {
                 <div className="space-y-3">
                   <label className="excel-label ml-1">Communication Channel</label>
                   <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
+                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
                     <input 
                       type="email" 
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-12 pr-4 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm uppercase tracking-widest"
+                      className="w-full pl-14 pr-4 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm uppercase tracking-widest"
                       placeholder="EMAIL@SYSTEM.COM"
                     />
                   </div>
@@ -145,19 +145,19 @@ export default function Auth() {
               <div className="space-y-3">
                 <label className="excel-label ml-1">Security Key</label>
                 <div className="relative group">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
+                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
                   <input 
                     type={showPassword ? "text" : "password"} 
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-12 pr-14 py-4 bg-[#D1D1D1] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm tracking-widest"
+                    className="w-full pl-14 pr-14 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm tracking-widest"
                     placeholder="••••••••"
                   />
                   <button 
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-black/30 hover:text-black transition-colors"
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-black/30 hover:text-black transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -168,7 +168,7 @@ export default function Auth() {
             <div className="space-y-6 pt-6">
               <button 
                 disabled={loading}
-                className="w-full bg-white text-black hover:bg-[#D1D1D1] border-2 border-black py-5 rounded-none font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-4 disabled:opacity-50 group"
+                className="w-full bg-white text-black hover:bg-[#E2E8F0] border-2 border-black py-5 rounded-none font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-4 disabled:opacity-50 group"
               >
                 {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                   <>

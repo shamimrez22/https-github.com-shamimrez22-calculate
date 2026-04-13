@@ -5,9 +5,9 @@
   --font-sans: "Inter", "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-brand-primary: #8B0000;
-  --color-brand-secondary: #E8C6B0;
-  --color-brand-accent: #D1D1D1;
+  --color-brand-primary: #2FA084;
+  --color-brand-secondary: #F0F9F6;
+  --color-brand-accent: #E2E8F0;
   
   --radius-3xl: 0px;
   --radius-4xl: 0px;
@@ -21,7 +21,7 @@
 
 @layer base {
   body {
-    @apply bg-[#E8C6B0] text-slate-900 antialiased;
+    @apply bg-[#F0F9F6] text-slate-900 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
@@ -31,32 +31,32 @@
     height: 8px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-[#E8C6B0] border-l border-[#8B0000];
+    @apply bg-[#F0F9F6] border-l border-[#2FA084];
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-[#8B0000] hover:bg-[#660000] transition-colors;
+    @apply bg-[#2FA084] hover:bg-[#248069] transition-colors;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-[#E8C6B0] border-2 border-[#8B0000] rounded-none;
+    @apply bg-white border-2 border-[#2FA084] rounded-none;
   }
   
   .glass-card-hover {
-    @apply hover:bg-white/10 transition-all duration-200;
+    @apply hover:bg-[#2FA084]/5 transition-all duration-200;
   }
 
   .neo-button {
-    @apply relative overflow-hidden transition-all duration-200 rounded-none border-2 border-black bg-white text-black hover:bg-[#D1D1D1] font-black uppercase tracking-widest text-[11px] px-6 py-3;
+    @apply relative overflow-hidden transition-all duration-200 rounded-none border-2 border-black bg-white text-black hover:bg-[#E2E8F0] font-black uppercase tracking-widest text-[11px] px-6 py-3;
   }
 
   .neo-button-primary {
-    @apply bg-[#8B0000] text-white hover:bg-[#660000];
+    @apply bg-[#2FA084] text-white hover:bg-[#248069];
   }
 
   .excel-input {
-    @apply w-full px-4 py-2 bg-[#D1D1D1] border-2 border-black rounded-none text-black outline-none font-bold text-sm focus:bg-white transition-all;
+    @apply w-full px-4 py-2 bg-[#E2E8F0] border-2 border-black rounded-none text-black outline-none font-bold text-sm focus:bg-white transition-all;
   }
 
   .excel-label {
@@ -64,13 +64,11 @@
   }
 
   .header-strip {
-    @apply bg-[#8B0000] text-white px-4 py-2 font-black uppercase tracking-widest text-xs border-2 border-black;
+    @apply bg-[#2FA084] text-white px-4 py-2 font-black uppercase tracking-widest text-xs border-2 border-black;
   }
 
   .grid-bg {
-    background-image: linear-gradient(rgba(139, 0, 0, 0.05) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(139, 0, 0, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-image: none;
   }
 }
 

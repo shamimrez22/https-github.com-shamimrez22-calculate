@@ -3,6 +3,7 @@ export interface UserProfile {
   username: string;
   email: string;
   displayName?: string;
+  photoURL?: string;
   currency: string;
   monthlyBudget?: number;
   createdAt: string;

@@ -5,6 +5,8 @@ import { Plus, Minus, X, Loader2, Calendar, Tag, FileText } from 'lucide-react';
 import { motion } from 'motion/react';
 import { notificationService } from '../services/notificationService';
 
+import VoiceInput from './VoiceInput';
+
 interface TransactionFormProps {
   onClose: () => void;
   budgets: Budget[];
@@ -97,9 +99,9 @@ export default function TransactionForm({ onClose, budgets, transactions, settin
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 20, opacity: 0 }}
-        className="bg-[#E8C6B0] w-full max-w-lg rounded-none overflow-hidden border-2 border-black"
+        className="bg-[#F0F9F6] w-full max-w-lg rounded-none overflow-hidden border-2 border-black"
       >
-        <div className="p-8 border-b-2 border-black flex justify-between items-center bg-[#8B0000] text-white">
+        <div className="p-8 border-b-2 border-black flex justify-between items-center bg-[#2FA084] text-white">
           <div className="space-y-1">
             <h2 className="text-2xl font-black tracking-tighter uppercase">New Entry</h2>
             <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Financial System Input</p>
@@ -116,7 +118,7 @@ export default function TransactionForm({ onClose, budgets, transactions, settin
               type="button"
               onClick={() => setType('expense')}
               className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-none transition-all ${
-                type === 'expense' ? 'bg-[#8B0000] text-white font-black text-[10px] uppercase tracking-widest' : 'text-black/40 text-[10px] font-black uppercase tracking-widest'
+                type === 'expense' ? 'bg-[#2FA084] text-white font-black text-[10px] uppercase tracking-widest' : 'text-black/40 text-[10px] font-black uppercase tracking-widest'
               }`}
             >
               <Minus className="w-4 h-4" /> Debit
@@ -125,7 +127,7 @@ export default function TransactionForm({ onClose, budgets, transactions, settin
               type="button"
               onClick={() => setType('income')}
               className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-none transition-all ${
-                type === 'income' ? 'bg-[#8B0000] text-white font-black text-[10px] uppercase tracking-widest' : 'text-black/40 text-[10px] font-black uppercase tracking-widest'
+                type === 'income' ? 'bg-[#2FA084] text-white font-black text-[10px] uppercase tracking-widest' : 'text-black/40 text-[10px] font-black uppercase tracking-widest'
               }`}
             >
               <Plus className="w-4 h-4" /> Credit
@@ -134,7 +136,13 @@ export default function TransactionForm({ onClose, budgets, transactions, settin
 
           <div className="space-y-8">
             <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-widest text-black/60 ml-1">Transaction Value</label>
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] font-black uppercase tracking-widest text-black/60 ml-1">Transaction Value</label>
+                <VoiceInput onResult={(text) => {
+                  const val = parseFloat(text.replace(/[^0-9.]/g, ''));
+                  if (!isNaN(val)) setAmount(val.toString());
+                }} language="en-US" />
+              </div>
               <div className="relative group">
                 <span className="absolute left-6 top-1/2 -translate-y-1/2 text-black font-black text-2xl">৳</span>
                 <input 
@@ -182,7 +190,13 @@ export default function TransactionForm({ onClose, budgets, transactions, settin
             </div>
 
             <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-widest text-black/60 ml-1">Audit Note</label>
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] font-black uppercase tracking-widest text-black/60 ml-1">Audit Note</label>
+                <div className="flex gap-2">
+                  <VoiceInput onResult={(text) => setNote(prev => prev ? `${prev} ${text}` : text)} language="bn-BD" />
+                  <VoiceInput onResult={(text) => setNote(prev => prev ? `${prev} ${text}` : text)} language="en-US" />
+                </div>
+              </div>
               <div className="relative group">
                 <FileText className="absolute left-4 top-5 text-black/40 group-focus-within:text-black w-5 h-5" />
                 <textarea 
