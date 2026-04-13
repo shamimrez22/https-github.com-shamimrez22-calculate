@@ -106,6 +106,21 @@ setInterval(() => {
   });
 }, 30000);
 
+app.post('/api/test-push', (req, res) => {
+  const subs = getSubs();
+  const { title, body } = req.body;
+  
+  subs.forEach((sub: any) => {
+    webpush.sendNotification(sub, JSON.stringify({
+      title: title || 'Test Notification',
+      body: body || 'This is a test of the offline alert system.',
+      icon: '/favicon.ico'
+    })).catch(err => console.error('Test push failed:', err));
+  });
+  
+  res.json({ success: true });
+});
+
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({

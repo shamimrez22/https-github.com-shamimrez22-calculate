@@ -218,15 +218,24 @@ export default function Settings() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">
                 <div className="p-4 bg-[#2FA084] text-white border-2 border-black">
-                  <Bell className="w-8 h-8" />
+                  <Smartphone className="w-8 h-8" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-black text-black uppercase tracking-tighter">Push Notifications</h4>
-                  <p className="text-[10px] text-black/40 font-black uppercase tracking-widest">Global alert system status</p>
+                  <h4 className="text-lg font-black text-black uppercase tracking-tighter">Offline Push Alerts</h4>
+                  <p className="text-[10px] text-black/40 font-black uppercase tracking-widest">Receive alerts even when app is closed</p>
                 </div>
               </div>
               <button 
-                onClick={() => setSettings({ ...settings, notificationsEnabled: !settings.notificationsEnabled })}
+                onClick={async () => {
+                  if (!settings.notificationsEnabled) {
+                    const granted = await notificationService.requestPermission();
+                    if (!granted) {
+                      showMessage('Permission required for offline alerts', 'error');
+                      return;
+                    }
+                  }
+                  setSettings({ ...settings, notificationsEnabled: !settings.notificationsEnabled });
+                }}
                 className={cn(
                   "w-16 h-8 border-2 border-black transition-all relative",
                   settings.notificationsEnabled ? "bg-[#2FA084]" : "bg-white/30"
@@ -238,6 +247,12 @@ export default function Settings() {
                 )} />
               </button>
             </div>
+
+            {settings.notificationsEnabled && (
+              <div className="bg-emerald-50 border-2 border-[#2FA084] p-4 text-[9px] font-black uppercase tracking-widest text-emerald-700">
+                Note: For offline alerts on Desktop, ensure Chrome is allowed to run in the background. On Android, ensure notifications are enabled in system settings.
+              </div>
+            )}
 
             <div className={cn(
               "space-y-10 transition-all",
@@ -296,20 +311,25 @@ export default function Settings() {
               {/* Test Notification */}
               <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button 
-                  onClick={() => {
-                    if (settings) {
-                      notificationService.sendNotification(
-                        'reminder',
-                        'SYSTEM TEST',
-                        'Operational signal verified. Background link active.',
-                        settings
-                      );
+                  onClick={async () => {
+                    try {
+                      await fetch('/api/test-push', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                          title: 'OFFLINE ALERT TEST',
+                          body: 'This notification was sent from the server. It works even if the app is closed!'
+                        }),
+                        headers: { 'Content-Type': 'application/json' }
+                      });
+                      showMessage('Test push signal sent to server');
+                    } catch (e) {
+                      showMessage('Failed to send test signal', 'error');
                     }
                   }}
-                  className="w-full py-4 border-2 border-black text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3"
+                  className="w-full py-4 bg-black text-white border-2 border-black text-[10px] font-black uppercase tracking-widest hover:bg-[#2FA084] transition-all flex items-center justify-center gap-3"
                 >
                   <Zap className="w-5 h-5" />
-                  Verify System Signal
+                  Test Offline Alert
                 </button>
                 <button 
                   onClick={async () => {

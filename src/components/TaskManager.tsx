@@ -4,6 +4,7 @@ import { storage } from '../lib/storage';
 import { Plus, Calendar, Clock, CheckCircle2, Circle, Trash2, Edit2, ListTodo, AlertCircle, Mic } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import TaskForm from './TaskForm';
+import { notificationService } from '../services/notificationService';
 import { format, isToday, isFuture, parseISO } from 'date-fns';
 import { cn } from '../lib/utils';
 import VoiceInput from './VoiceInput';
@@ -118,10 +119,12 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
         repeat: 'none',
         createdAt: new Date().toISOString(),
       };
+      const updatedTasks = [...data.tasks, newTask];
       storage.setUserData(profile.uid, {
         ...data,
-        tasks: [...data.tasks, newTask]
+        tasks: updatedTasks
       });
+      await notificationService.syncTasksWithServer(profile.uid, updatedTasks);
       setQuickTask({ ...quickTask, title: '' });
     } catch (error) {
       console.error(error);
@@ -133,10 +136,12 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
     if (!profile || !task.id) return;
     try {
       const data = storage.getUserData(profile.uid);
+      const updatedTasks = data.tasks.map(t => t.id === task.id ? { ...t, completed: !t.completed } : t);
       storage.setUserData(profile.uid, {
         ...data,
-        tasks: data.tasks.map(t => t.id === task.id ? { ...t, completed: !t.completed } : t)
+        tasks: updatedTasks
       });
+      await notificationService.syncTasksWithServer(profile.uid, updatedTasks);
     } catch (error: any) {
       console.error(error);
     }
@@ -147,10 +152,12 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
     if (!profile) return;
     try {
       const data = storage.getUserData(profile.uid);
+      const updatedTasks = data.tasks.filter(t => t.id !== id);
       storage.setUserData(profile.uid, {
         ...data,
-        tasks: data.tasks.filter(t => t.id !== id)
+        tasks: updatedTasks
       });
+      await notificationService.syncTasksWithServer(profile.uid, updatedTasks);
     } catch (error: any) {
       console.error(error);
     }
@@ -302,9 +309,13 @@ export default function TaskManager({ tasks }: TaskManagerProps) {
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 -mr-16 -mt-16 rotate-45" />
             <ListTodo className="w-12 h-12 mb-8 text-white" />
             <h3 className="text-2xl font-black mb-4 tracking-tighter uppercase">System Integrity</h3>
-            <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest leading-relaxed mb-10">
-              Operational status: Optimal. All tasks are synchronized with the central audit core.
+            <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest leading-relaxed mb-6">
+              Operational status: Optimal. All tasks are synchronized with the central audit core for offline alerts.
             </p>
+            <div className="flex items-center gap-2 mb-10">
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+              <span className="text-[8px] font-black uppercase tracking-widest text-white">Live Sync Active</span>
+            </div>
             <div className="flex items-center gap-12">
               <div className="flex flex-col">
                 <span className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-2">Active</span>

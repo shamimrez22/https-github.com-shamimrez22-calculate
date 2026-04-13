@@ -3,18 +3,89 @@ import { AppNotification, UserSettings } from '../types';
 
 class NotificationService {
   private sounds = {
-    budget_exceeded: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3', // Loud warning
-    budget_warning: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', // Soft alert
-    reminder: 'https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3', // Subtle tone
-    ai_insight: 'https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3', // Subtle tone
-    goal_progress: 'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3', // Success tone
-    task_reminder: 'https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3', // Loud alarm tone
+    budget_exceeded: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
+    budget_warning: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
+    reminder: 'https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3',
+    ai_insight: 'https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3',
+    goal_progress: 'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3',
+    task_reminder: 'https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3',
   };
+
+  private urlBase64ToUint8Array(base64String: string) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
 
   async requestPermission(): Promise<boolean> {
     if (!("Notification" in window)) return false;
     const permission = await Notification.requestPermission();
+    
+    if (permission === "granted") {
+      await this.subscribeToPush();
+    }
+    
     return permission === "granted";
+  }
+
+  private async subscribeToPush() {
+    if (!('serviceWorker' in navigator)) return;
+
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      
+      // Get VAPID public key from server
+      const response = await fetch('/api/vapid-public-key');
+      const { publicKey } = await response.json();
+      
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: this.urlBase64ToUint8Array(publicKey)
+      });
+
+      // Send subscription to server
+      await fetch('/api/subscribe', {
+        method: 'POST',
+        body: JSON.stringify(subscription),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Push subscription successful');
+      
+      // Initial task sync
+      const profile = storage.getCurrentUser();
+      if (profile) {
+        const data = storage.getUserData(profile.uid);
+        await this.syncTasksWithServer(profile.uid, data.tasks);
+      }
+    } catch (error) {
+      console.error('Push subscription failed:', error);
+    }
+  }
+
+  async syncTasksWithServer(uid: string, tasks: any[]) {
+    try {
+      await fetch('/api/sync-tasks', {
+        method: 'POST',
+        body: JSON.stringify({ uid, tasks }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    } catch (error) {
+      console.error('Task sync failed:', error);
+    }
   }
 
   async sendNotification(

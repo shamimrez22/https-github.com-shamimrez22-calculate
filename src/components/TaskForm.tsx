@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Task } from '../types';
 import { storage } from '../lib/storage';
+import { notificationService } from '../services/notificationService';
 import { X, Calendar, Clock, Loader2, ListTodo } from 'lucide-react';
 import { motion } from 'motion/react';
 import VoiceInput from './VoiceInput';
@@ -46,18 +47,16 @@ export default function TaskForm({ onClose, task }: TaskFormProps) {
 
     try {
       const data = storage.getUserData(profile.uid);
+      let updatedTasks;
       if (task?.id) {
-        storage.setUserData(profile.uid, {
-          ...data,
-          tasks: data.tasks.map(t => t.id === task.id ? {
-            ...t,
-            title,
-            notes,
-            scheduledAt,
-            priority,
-            repeat,
-          } : t)
-        });
+        updatedTasks = data.tasks.map(t => t.id === task.id ? {
+          ...t,
+          title,
+          notes,
+          scheduledAt,
+          priority,
+          repeat,
+        } : t);
       } else {
         const newTask: Task = {
           id: Math.random().toString(36).substring(2, 15),
@@ -70,11 +69,15 @@ export default function TaskForm({ onClose, task }: TaskFormProps) {
           repeat,
           createdAt: new Date().toISOString(),
         };
-        storage.setUserData(profile.uid, {
-          ...data,
-          tasks: [...data.tasks, newTask]
-        });
+        updatedTasks = [...data.tasks, newTask];
       }
+      
+      storage.setUserData(profile.uid, {
+        ...data,
+        tasks: updatedTasks
+      });
+      
+      await notificationService.syncTasksWithServer(profile.uid, updatedTasks);
       onClose();
     } catch (error: any) {
       console.error(error);
