@@ -20,6 +20,16 @@ class StorageService {
   getCurrentUser(): UserProfile | null {
     const user = this.getStorageData<UserProfile | null>(STORAGE_KEYS.CURRENT_USER, null);
     
+    // Check if account is locked
+    if (user) {
+      const users = this.getStorageData<Record<string, { profile: UserProfile, password: string }>>(STORAGE_KEYS.USERS, {});
+      const userInDb = users[user.username];
+      if (userInDb && userInDb.profile.isLocked) {
+        this.setCurrentUser(null);
+        return null;
+      }
+    }
+    
     // Migration: If user exists but has no role, and is the only user, make them admin
     if (user && !user.role) {
       const users = this.getStorageData<Record<string, { profile: UserProfile, password: string }>>(STORAGE_KEYS.USERS, {});
