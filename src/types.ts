@@ -107,4 +107,5 @@ export type Category =
   | "Health" 
   | "Salary" 
   | "Business" 
+  | "Savings"
   | "Other";

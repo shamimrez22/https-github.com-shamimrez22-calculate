@@ -113,13 +113,13 @@ export default function Auth() {
               <div className="space-y-3">
                 <label className="excel-label ml-1">Identity Identifier</label>
                 <div className="relative group">
-                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
+                  <User className="absolute left-6 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
                   <input 
                     type="text" 
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-14 pr-4 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm uppercase tracking-widest"
+                    className="w-full pl-16 pr-4 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm uppercase tracking-widest"
                     placeholder="USERNAME"
                   />
                 </div>
@@ -129,13 +129,13 @@ export default function Auth() {
                 <div className="space-y-3">
                   <label className="excel-label ml-1">Communication Channel</label>
                   <div className="relative group">
-                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
+                    <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
                     <input 
                       type="email" 
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-14 pr-4 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm uppercase tracking-widest"
+                      className="w-full pl-16 pr-4 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm uppercase tracking-widest"
                       placeholder="EMAIL@SYSTEM.COM"
                     />
                   </div>
@@ -145,13 +145,13 @@ export default function Auth() {
               <div className="space-y-3">
                 <label className="excel-label ml-1">Security Key</label>
                 <div className="relative group">
-                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
+                  <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black transition-colors w-5 h-5" />
                   <input 
                     type={showPassword ? "text" : "password"} 
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-14 pr-14 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm tracking-widest"
+                    className="w-full pl-16 pr-14 py-4 bg-[#E2E8F0] border-2 border-black rounded-none text-black placeholder-black/30 focus:bg-white outline-none transition-all font-bold text-sm tracking-widest"
                     placeholder="••••••••"
                   />
                   <button 

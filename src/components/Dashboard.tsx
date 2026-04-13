@@ -1,9 +1,11 @@
-import React, { useMemo } from 'react';
-import { Transaction, Budget, UserProfile, SavingsGoal, Task } from '../types';
+import React, { useMemo, useState } from 'react';
+import { Transaction, Budget, UserProfile, SavingsGoal, Task, Category } from '../types';
 import { PieChart, Pie, Cell, ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { TrendingUp, TrendingDown, Wallet, AlertCircle, Plus, ArrowUpRight, ArrowDownRight, CreditCard, Activity, Target, Zap, History, Shield, Goal, LayoutGrid, BarChart3, Clock, ArrowRight, Sparkles, Bell, Search, Settings, ListTodo } from 'lucide-react';
-import { motion } from 'motion/react';
+import { TrendingUp, TrendingDown, Wallet, AlertCircle, Plus, ArrowUpRight, ArrowDownRight, CreditCard, Activity, Target, Zap, History, Shield, Goal, LayoutGrid, BarChart3, Clock, ArrowRight, Sparkles, Bell, Search, Settings, ListTodo, MoreVertical, PlusSquare, Banknote, Receipt, Wallet2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
+import TransactionForm from './TransactionForm';
+import { storage } from '../lib/storage';
 
 interface DashboardProps {
   transactions: Transaction[];
@@ -15,9 +17,10 @@ interface DashboardProps {
   onNavigate: (tab: string) => void;
 }
 
-const COLORS = ['#6366f1', '#10b981', '#f43f5e', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16', '#64748b'];
-
 export default function Dashboard({ transactions, budgets, goals, tasks, onAddTransaction, profile, onNavigate }: DashboardProps) {
+  const [showQuickMenu, setShowQuickMenu] = useState(false);
+  const [quickEntryType, setQuickEntryType] = useState<'income' | 'expense' | 'savings' | null>(null);
+
   const stats = useMemo(() => {
     const income = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
     const expenses = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
@@ -50,6 +53,58 @@ export default function Dashboard({ transactions, budgets, goals, tasks, onAddTr
           </div>
         </div>
         <div className="flex items-center gap-2 md:gap-8">
+          <div className="relative">
+            <button 
+              onClick={() => setShowQuickMenu(!showQuickMenu)}
+              className="p-2 bg-[#2FA084] text-white hover:bg-black transition-all border border-white/20 flex items-center gap-2"
+            >
+              <PlusSquare className="w-5 h-5" />
+              <span className="hidden md:inline text-[10px] font-black uppercase tracking-widest">Quick Entry</span>
+            </button>
+
+            <AnimatePresence>
+              {showQuickMenu && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setShowQuickMenu(false)} />
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="absolute right-0 mt-2 w-56 bg-white border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] z-50 overflow-hidden"
+                  >
+                    <button 
+                      onClick={() => { setQuickEntryType('income'); setShowQuickMenu(false); }}
+                      className="w-full p-4 flex items-center gap-4 hover:bg-[#F0F9F6] transition-all border-b border-black/10 group"
+                    >
+                      <div className="p-2 bg-emerald-50 text-emerald-700 border border-emerald-200 group-hover:border-emerald-700 transition-all">
+                        <TrendingUp className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-black text-black uppercase tracking-widest">Income Entry</span>
+                    </button>
+                    <button 
+                      onClick={() => { setQuickEntryType('expense'); setShowQuickMenu(false); }}
+                      className="w-full p-4 flex items-center gap-4 hover:bg-rose-50 transition-all border-b border-black/10 group"
+                    >
+                      <div className="p-2 bg-rose-50 text-rose-700 border border-rose-200 group-hover:border-rose-700 transition-all">
+                        <TrendingDown className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-black text-black uppercase tracking-widest">Expense Entry</span>
+                    </button>
+                    <button 
+                      onClick={() => { setQuickEntryType('savings'); setShowQuickMenu(false); }}
+                      className="w-full p-4 flex items-center gap-4 hover:bg-blue-50 transition-all group"
+                    >
+                      <div className="p-2 bg-blue-50 text-blue-700 border border-blue-200 group-hover:border-blue-700 transition-all">
+                        <Shield className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-black text-black uppercase tracking-widest">Savings Entry</span>
+                    </button>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+
           <div className="hidden sm:flex flex-col items-end">
             <p className="text-[6px] md:text-[8px] font-black uppercase tracking-widest opacity-40">Liquidity</p>
             <p className="text-sm md:text-xl font-black tracking-tight">৳{stats.balance.toLocaleString()}</p>
@@ -188,6 +243,19 @@ export default function Dashboard({ transactions, budgets, goals, tasks, onAddTr
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {quickEntryType && (
+          <TransactionForm 
+            onClose={() => setQuickEntryType(null)}
+            budgets={budgets}
+            transactions={transactions}
+            settings={storage.getUserData(profile?.uid || '').settings}
+            initialType={quickEntryType === 'savings' ? 'expense' : quickEntryType}
+            initialCategory={quickEntryType === 'savings' ? 'Savings' as Category : undefined}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

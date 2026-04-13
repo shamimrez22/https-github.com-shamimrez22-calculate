@@ -87,7 +87,10 @@ export default function Layout({ children, activeTab, setActiveTab, unreadCount 
               <div className="w-12 h-12 bg-[#2FA084] border-2 border-black rounded-none flex items-center justify-center shrink-0">
                 <PieChart className="text-white w-6 h-6" />
               </div>
-              <span className="block font-black text-3xl tracking-tighter text-black uppercase">SS FIN TRACK<span className="text-[#2FA084]">.</span></span>
+              <div className="flex flex-col">
+                <span className="block font-black text-3xl tracking-tighter text-black uppercase leading-none">SS FIN TRACK<span className="text-[#2FA084]">.</span></span>
+                <span className="block font-black text-[8px] tracking-[0.2em] text-[#2FA084] uppercase mt-1">DEPLOYED BY MD. SHAMIM REZA</span>
+              </div>
             </div>
             <button 
               onClick={() => setIsSidebarOpen(false)}

@@ -12,14 +12,16 @@ interface TransactionFormProps {
   budgets: Budget[];
   transactions: Transaction[];
   settings: UserSettings;
+  initialType?: 'income' | 'expense';
+  initialCategory?: Category;
 }
 
-const CATEGORIES: Category[] = ["Food", "Transport", "Shopping", "Bills", "Entertainment", "Health", "Salary", "Business", "Other"];
+const CATEGORIES: Category[] = ["Food", "Transport", "Shopping", "Bills", "Entertainment", "Health", "Salary", "Business", "Savings", "Other"];
 
-export default function TransactionForm({ onClose, budgets, transactions, settings }: TransactionFormProps) {
-  const [type, setType] = useState<'income' | 'expense'>('expense');
+export default function TransactionForm({ onClose, budgets, transactions, settings, initialType, initialCategory }: TransactionFormProps) {
+  const [type, setType] = useState<'income' | 'expense'>(initialType || 'expense');
   const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState<Category>('Food');
+  const [category, setCategory] = useState<Category>(initialCategory || 'Food');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
